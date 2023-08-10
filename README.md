@@ -99,7 +99,7 @@ A key design goal of the FlexBE is to support "Collaborative Autonomy" where an 
 
 Ensure that a `turtlesim` node is running and its graphic window is open; if not
 
-`ros2 run  turtlesim turtlesim_node`.
+`ros2 run  turtlesim turtlesim_node`
 
 There are 3 approaches to launching the full FlexBE suite for operator supervised autonomy-based control.
 Use one (and only one) of the following approaches:
