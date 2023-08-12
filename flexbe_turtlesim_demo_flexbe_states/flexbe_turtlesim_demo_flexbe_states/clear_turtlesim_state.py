@@ -58,9 +58,17 @@ class ClearTurtlesimState(EventState):
         self._srv_request = Empty.Request()
 
         self._error = None
+        self._srv = None
 
+    def on_start(self):
         # Set up the proxy now, but do not wait on the service just yet
         self._srv = ProxyServiceCaller({self._srv_topic: Empty}, wait_duration=0.0)
+
+    def on_stop(self):
+        # Remove the proxy client if no longer in use
+        ProxyServiceCaller.remove_client(self._srv_topic)
+        self._srv = None
+
 
     def execute(self, userdata):
         # Execute this method periodically while the state is active.

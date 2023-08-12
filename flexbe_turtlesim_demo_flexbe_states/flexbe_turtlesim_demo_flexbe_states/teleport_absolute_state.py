@@ -74,9 +74,16 @@ class TeleportAbsoluteState(EventState):
         self._srv_request.theta = theta
 
         self._error = None
+        self._srv = None
 
+    def on_start(self):
         # Set up the proxy now, but do not wait on the service just yet
         self._srv = ProxyServiceCaller({self._srv_topic: TeleportAbsolute}, wait_duration=0.0)
+
+    def on_stop(self):
+        # Remove the proxy client if no longer in use
+        ProxyServiceCaller.remove_client(self._srv_topic)
+        self._srv = None
 
     def execute(self, userdata):
         """
