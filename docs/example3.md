@@ -4,8 +4,8 @@ The `Example 3` behavior constructs a HFSM with a `ConcurrencyContainer`(https:/
 
 
 After starting the FlexBE system, load the `Example 3`
-behavior from the FlexBE UI dashboard.  The leftmost image below shows the 
-configuration dashboard after loading, and the right image shows the top-level state machine with the 
+behavior from the FlexBE UI dashboard.  The leftmost image below shows the
+configuration dashboard after loading, and the right image shows the top-level state machine with the
 `ConcurrencyContainer`s shown.  Click on any image to see the high-resolution version.
 
 <p float="center">
@@ -46,9 +46,9 @@ The "Runtime Control" panel allows the operator to adjust the wait times as show
   <img src="../img/example3_or_progress.png" alt="Example 3 Concurrent_OR in progress." width="30%">
 </p>
 
-The onboard terminal logging includes the `Logger.localinfo` from `execute` method, and shows the alternating "concurrent" 
-tics until one state in the concurrent container executes.  Then the behavior depends on how the outputs are connected. 
-The leftmost image below shows the behavior of the `Concurrent_OR` container, and the rightmost image shows the behavior 
+The onboard terminal logging includes the `Logger.localinfo` from `execute` method, and shows the alternating "concurrent"
+tics until one state in the concurrent container executes.  Then the behavior depends on how the outputs are connected.
+The leftmost image below shows the behavior of the `Concurrent_OR` container, and the rightmost image shows the behavior
 of the `Concurrent_AND` container given the respective 4.0 and 2.0 second wait times for this example.
 
 <p float="center">
@@ -57,7 +57,7 @@ of the `Concurrent_AND` container given the respective 4.0 and 2.0 second wait t
 </p>
 
 > Note: The current release version of FlexBE UI (3.x.x) only shows the first state in the `Concurrent` container.
-> This can cause issues where that state exits first.  A development version shows the deepest active state, and updates 
+> This can cause issues where that state exits first.  A development version shows the deepest active state, and updates
 > as the internal states change.  I suggest you change the relevant wait times and compare the UI for the `Concurrent_AND` container.
 
 Try running the behavior at varying autonomy levels.
@@ -69,8 +69,10 @@ The behavior implementation class inherits from the [`Behavior` class](https://g
 
 > Note: This links to the source version.  Any edits or changes are saved in the `install` folder.
 
-The operatorable adjustable parameters are defined and initialized using the `add_parameter` instance method of the `Behavior` class.
-Any states used in the instance are initialized with the ROS node instance reference.  These values are communicated with the `TODO - FIX THIS`(todo_fix_this_link) message from the OCS UI.  In contrast the private configuration variables are defined locally in the `create` method, and are not communicated from the OCS side.
+The operator adjustable parameters are defined and initialized using the `add_parameter` instance method of the `Behavior` class.
+Any states used in the instance are initialized with the ROS node instance reference.  
+These values are communicated with the `/flexbe/request_behavior` message from the OCS UI.  
+In contrast the private configuration variables are defined locally in the `create` method, and are not communicated from the OCS side.
 
 ```python
 class Example3SM(Behavior):
@@ -78,9 +80,9 @@ class Example3SM(Behavior):
     Define Example Concurrent Behavior.
 
     This is a simple example for a behavior using custom example_state that logs each function in life cycle.
-    
+
     Here we demonstrate concurrent behaviors with both OR and AND style exit conditions.
-    
+
     """
 
     def __init__(self, node):
@@ -106,17 +108,17 @@ class Example3SM(Behavior):
 
 The state machine is defined and created using the `create` instance method.
 First each container is instantiated, and their substates are added.
-Then the top-level state machine is instantiated, and its internal states are added, including 
+Then the top-level state machine is instantiated, and its internal states are added, including
 the container state machines, which are themselves state instances.
 The state definitions include both the transition target and required autonomy level
-(e.g. the `Start` state `done` outcome transitions to `Concurrent_OR`, and 
+(e.g. the `Start` state `done` outcome transitions to `Concurrent_OR`, and
 requires `Low` autonomy).
-Notice that some states have their package name prepended 
+Notice that some states have their package name prepended
 (e.g. `flexbe_turtlesim_demo_flexbe_states__ExampleState`);
 this occurs automatically if the same state name occurs multiple times in a workspace.
 
-The comment lines with x- and y-coordinates (e.g., `# x: 500 y:78`) are used to record state locations or transition 
-arc coordinates in the UI state machine editor.  Thus this file serves as both the executable Python script, 
+The comment lines with x- and y-coordinates (e.g., `# x: 500 y:78`) are used to record state locations or transition
+arc coordinates in the UI state machine editor.  Thus this file serves as both the executable Python script,
 and the UI graphics source.
 
 
