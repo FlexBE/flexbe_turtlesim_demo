@@ -1,9 +1,35 @@
 
 # Pose Behavior
 
-The "Pose" transition makes use a `StateMachine` container with three states, including the 
-`InputState` discussed in ["Rotate"](rotate_behavior.md) and 
+The "Pose" transition makes use a `StateMachine` container with three states, including the
+`InputState` discussed in ["Rotate"](rotate_behavior.md) and
 `TeleportAbsoluteState` first discused in ["Home"](home_behavior.md).
+
+----
+
+### User Input
+
+This demonstration presumes you have started the [`input_action_server`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_input/flexbe_input/input_action_server.py) on the OCS computer:
+
+`ros2 run flexbe_input input_action_server`
+
+
+This `input_action_server` interacts with the [`InputState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/input_state.py).  This simple `input_action_server` demonstration is intended to provide basic functionality for limited
+primitive inputs such as numbers or `list`/`tuple`s of numbers.
+
+See [Complex Data Input](docs/complex_data_input.md) for more information about the `InputState` usage.
+
+> Note: The `InputState` makes use of the `pickle` module, and is subject to this warning from the Pickle manual:
+
+>   Warning The pickle module is not secure against erroneous or maliciously constructed data.
+>   Never unpickle data received from an untrusted or unauthenticated source.
+
+If using the `InputState` it is up to the user to protect their network from untrusted data.
+
+
+----
+
+
 
 The `InputState` remaps its `userdata` `data` key to provide the `pose` key used by the `TeleportAbsoluteState`.
 
@@ -12,8 +38,8 @@ The `InputState` remaps its `userdata` `data` key to provide the `pose` key used
   <img src="img/pose_input.png" alt="Pose input as list of numbers." width="45%">
 </p>
 
-In the `InputState` configuration, we 
-  * specify result type 3 ([`BehaviorInput.Goal.REQUEST_3D`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a `list` (or `tuple`) of three numbers from the user, 
+In the `InputState` configuration, we
+  * specify result type 3 ([`BehaviorInput.Goal.REQUEST_3D`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a `list` (or `tuple`) of three numbers from the user,
   * specify the prompt message for the user interface
   * specify a timeout value for the `input_action_server` to become available
   * specify the output userdata key mapping (e.g. `pose` in this case)
@@ -21,7 +47,7 @@ In the `InputState` configuration, we
 > Note: For 2D, 3D, 4D request types, we accept `list` (e.g. '[1., 2, 3]'), `tuple` (e.g. '(1., 2, 3)'),
 > or just a comma separated string of numbers (e.g. '1., 2, 3') of the appropriate length as input on the UI.
 
-> Note: The `InputState` `timeout` refers to waiting for the action server to become available. 
+> Note: The `InputState` `timeout` refers to waiting for the action server to become available.
 > The system will wait indefinitely for the operator to respond.
 
 The `TeleportAbsoluteState` extracts the pose data from the userdata and makes the non-blocking service call as described in ["Home"](home_behavior.md).
@@ -51,7 +77,7 @@ The `TeleportAbsoluteState` extracts the pose data from the userdata and makes t
 ----
 
 This example discussed the use of `InputState` to provide more complex operator data to the onboard behavior in collaborative autonomy.
-See ["Rotate"](rotate_behavior.md) and ["Home"](home_behavior.md) discussions for more details about the individual states, and 
+See ["Rotate"](rotate_behavior.md) and ["Home"](home_behavior.md) discussions for more details about the individual states, and
 ["Eight"](eight_loop.md) for more discussion of the `StateMachine` container.
 
 

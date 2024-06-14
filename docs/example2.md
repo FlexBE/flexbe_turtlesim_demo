@@ -3,13 +3,16 @@
 The `Example 2` behavior constructs a simple state machine
 using three states.
 
-After starting the FlexBE system, load the `Example 2`
-behavior from the FlexBE UI dashboard.  The leftmost image below shows the 
-configuration dashboard after loading, and the center image shows the state machine with the 
-`ExampleState` properties shown.  The rightmost image shows the state machine after entering 
-the `A` example state. 
+After starting the FlexBE system, including both the FlexBE onboard and OCS, as
+described [here](docs/flexbe_webui_startup.md) for the FlexBE WebUI or
+the [flexbe_app](docs/flexbe_app_startup.md).
 
-> Note: In low autonomy, you must click the `done` transition after the `Start` state to manually 
+Load the `Example 2` behavior from the FlexBE UI dashboard.  The leftmost image below shows the
+configuration dashboard after loading, and the center image shows the state machine with the
+`ExampleState` properties shown.  The rightmost image shows the state machine after entering
+the `A` example state.
+
+> Note: In low autonomy, you must click the `done` transition after the `Start` state to manually
 > transition to the `A` state as the transition is blocked due to autonomy level.
 
 <p float="center">
@@ -18,7 +21,7 @@ the `A` example state.
   <img src="../img/example2_a_state_enter.png" alt="Example 2 state machine running." width="30%">
 </p>
 
-In addition to the `LogState` from `Example 1`, this behavior uses the `ExampleState` provided as part of this repo in 
+In addition to the `LogState` from `Example 1`, this behavior uses the `ExampleState` provided as part of this repo in
 `flexbe_turtlesim_demo_flexbe_states`.  You are free to develop your own FlexBE state implementations that inherit from
 `EventState`.  To let FlexBE find your states implementations,
 write them as a normal ROS 2 installed Python script, and specify
@@ -30,7 +33,7 @@ that the package `export`s `<flexbe_states />`.
 </export>
 ```
 
-Our [`ExampleState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) specifies one parameter (`target_time`) and two outputs (`'done'` and `'failed'`).  
+Our [`ExampleState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) specifies one parameter (`target_time`) and two outputs (`'done'` and `'failed'`).
 This example does NOT use `userdata`.
 
 ```
@@ -62,7 +65,7 @@ def __init__(self, target_time):
 ```
 
 This state is tasked with waiting for the specified time after entering the state before returning done.  This state specifies
-two possible outcomes, but only one is actually achievable with this code as we do not anticipate actually encountering the failed case 
+two possible outcomes, but only one is actually achievable with this code as we do not anticipate actually encountering the failed case
 with this demo.
 We define other instance attributes to hold data.
 
@@ -159,15 +162,15 @@ A few key points:
 * The `EventState` super class maintains a reference to the ROS `node` of the behavior.  Here we use the `_node` attribute get the ROS clock instance.
 * Normal Python constructs including `for`-loops, `if-else`, and
 `try-except` blocks are valid within these methods with a few caveats:
-* Only `execute` should return a value
-* States should be fast acting "reactive" states.
-    * Offload longer running processes, such as planning, to separate nodes and preferably interface using regular `topics` and `actions`
-* Again, these methods should *NOT* be long `blocking` calls.  
 
-> Note: While blocking calls are possible, prefer to use non-blocking calls such as `actions` or asychronous service calls.  
-See the TurtleSim demo discussions for ["Home"](home_behavior.md), ["Clear"](clear_behavior.md), and ["Rotate"](rotate_behavior.md) 
+  * Only `execute` should return a value
+  * States should be fast acting "reactive" states.
+      * Offload longer running processes, such as planning, to separate nodes and interface using regular `topics` and `actions`
+  * Again, to emphasize, these state implementation methods should *NOT* be long `blocking` calls to retain responsiveness.
+
+> Note: While blocking calls are possible, prefer to use non-blocking calls such as `actions` or asychronous service calls.
+See the TurtleSim demo discussions for ["Home"](home_behavior.md), ["Clear"](clear_behavior.md), and ["Rotate"](rotate_behavior.md)
 for more information about `action` and `service` handling.
-
 
 The [`ExampleState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) `execute` function monitors the time since `on_enter`, and returns `done` when the *approximate* time has elapsed based on the designated update rate.
 
@@ -211,11 +214,11 @@ def execute(self, userdata):
 
 A few key points about the `execute` method:
 * We track any previous `_return` value in case the operator has the exit transition blocked due to an autonomy
-level.  
-If the transition is blocked, the state continues to call `execute`.  
+level.
+If the transition is blocked, the state continues to call `execute`.
 So, the state designer can choose to re-do the execute, or just return
 the previous value depending on the specific implementation
- design.  This flexibility is left to the state developer.  
+ design.  This flexibility is left to the state developer.
 But, be aware that the the `execute` is called if a transition is blocked.
 We will guide you through this later in the example demonstration.
 * This example includes a significant amount of logging to console; this is
@@ -225,8 +228,8 @@ although we do not expect this block to be exercised in this example.
 
 Now, start the execution in `Low` autonomy.
 
-During normal execution, the `Logger.localinfo` method call above only logs to the `.ros/log` file and onboard terminal, it does NOT send 
-a message to the FlexBE UI.  Thus, only the final return values are shown at the FlexBE console.  The leftmost image 
+During normal execution, the `Logger.localinfo` method call above only logs to the `.ros/log` file and onboard terminal, it does NOT send
+a message to the FlexBE UI.  Thus, only the final return values are shown at the FlexBE console.  The leftmost image
 below shows the onboard terminal output as the execute method continues to be called until the final return value, then `on_exit`
 is called.  As the required autonomy level for this outcome is `off`, the system exits the behavior and `on_stop` is called for all
 states.  The rightmost image shows the final output on the FlexBE UI as after the behavior completes and the system is ready for more.
@@ -238,11 +241,12 @@ states.  The rightmost image shows the final output on the FlexBE UI as after th
 
 For the next run, try setting the autonomy level higher to "High" or "Full", which will allow the behavior to run to completion without the operator needed to click "done" after the log state, or to "Off" which will require the operator to confirm every transition.
 
-Also try to force early transitions by clicking on the transition label oval.  Try editing the state machine and modifying the configuration messages or wait times on the dashboard.  You will need to resave the behavior.  
+Also try to force early transitions by clicking on the transition label oval.  Try editing the state machine and modifying the configuration messages or wait times on the dashboard.  You will need to resave the behavior.
 
-> Note: Currently behaviors are saved under the workspace `install` folder of the OCS machine.  
+> Note: Currently behaviors are saved under the workspace `install` folder of the OCS machine.
 > These changes are not visible in the source folder, and will be lost if the package is rebuilt.
 > To save any changes, the updated behavior Python and xml manifest files must be copied to the source folder.
 
 After experimenting with `Example 2`, continue on to [Example 3](docs/example3.md) for a look at our first Hierarchical Finite State Machine (HFSM) using a `ConcurrencyContainter` that executes states in "parallel".
 
+[Back to the overview](../docs/examples.md)

@@ -3,24 +3,12 @@
 The first behavior, `Example 1`, constructs a simple state machine
 using two states provided with the FlexBE Behavior Engine.
 
-After starting the FlexBE system using either  
-
-`ros2 launch flexbe_app flexbe_full.launch.py use_sim_time:=False`
-
-or the individual components
-
-  `ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
-
-  `ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror" -p use_sim_time:=False`
-
-  `ros2 run flexbe_app run_app --ros-args --remap name:="flexbe_app" -p use_sim_time:=False`
-
-  `ros2 run flexbe_widget be_launcher --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
+Start the FlexBE onboard and OCS as described [here](docs/flexbe_webui_startup.md) for the FlexBE WebUI or the [flexbe_app](docs/flexbe_app_startup.md). The basic directions are the same afterwards.
 
 Load the `Example 1` behavior from the FlexBE UI dashboard as shown in the leftmost image below.  Once loaded,
 the "Behavior Dashboard" shows the behavior configuration information as shown in the center image below.
-For this behavior, an operator settable "parameter" `waiting_time` is defined, along with a constant private configuration 
-variable `log_msg`.  In the upper left, the "Overview" pane provides the name of the behavior "Example 1", a description and author 
+For this behavior, an operator settable "parameter" `waiting_time` is defined, along with a constant private configuration
+variable `log_msg`.  In the upper left, the "Overview" pane provides the name of the behavior "Example 1", a description and author
 information.  The behavior name is converted into the implementation Python file name, `example_1_sm.py` and class name `Example1SM`.
 In addition to the Python file, a "behavior manifest" `example_1.xml` is written as well.
 
@@ -33,9 +21,9 @@ In addition to the Python file, a "behavior manifest" `example_1.xml` is written
 FlexBE Behavior editor view for "Example 1" behavior.  Click on any image to see the high resolution annotated versions.
 
 The "Statemachine Editor" tab allows one to view the existing state machine that we have loaded, as shown in the rightmost image above.
-One could edit and save the state machine, but for now we will just explore.  By double clicking on a state, a state property edit box is opened, as shown in the outlined callouts above.  
+One could edit and save the state machine, but for now we will just explore.  By double clicking on a state, a state property edit box is opened, as shown in the outlined callouts above.
 
-Example 1 uses a standard FlexBE `LogState`(https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/log_state.py) and a `WaitState`(https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/wait_state.py) state implementation show below.
+Example 1 uses a standard FlexBE [`LogState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/log_state.py) and a [`WaitState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/wait_state.py) state implementation show below.
 
 The log state is one of the simplest FlexBE state implementations.
 ```python
@@ -70,11 +58,11 @@ class LogState(EventState):
 
 The state implementation is a Python script that provides the
 actual execution of the state. In this example, we import the FlexBE Logger class, which is used to which prints
-a message in the onboard terminal, the standard FlexBE log file, and on the operators FlexBE UI.  
+a message in the onboard terminal, the standard FlexBE log file, and on the operators FlexBE UI.
 The `__init__` parameters `text` and `severity` are shown in the state property edit box as shown in the rightmost image above.
 The possible outcome `done` is likewise shown, and the editor allows one to set a required autonomy level for autonomous transition.
 
-The state implementation must be defined by super classing the [`EventState`]:(https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/core/event_state.py)
+The state implementation must be defined by super classing the [`EventState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/core/event_state.py)
 class provided by FlexBE in the `flexbe_core` package.
 
 The Python doc-string in the `"""`-marks provides information
@@ -100,7 +88,7 @@ The `execute` method is invoked at a specified rate until is returns something o
 It is expected (and enforced at run time), that the returned values are as specified as valid (e.g. `done` in this case).
 For the `LogState` the execute function immediately returns `done` as there is nothing more to do.
 
-Our second state is the `WaitState`(https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/wait_state.py) state implementation show below.
+Our second state is the [`WaitState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/wait_state.py) state implementation show below.
 
 ```python
 from flexbe_core import EventState
@@ -131,24 +119,24 @@ class WaitState(EventState):
         self._start_time = WaitState._node.get_clock().now()
 ```
 
-The `wait_time` parameter says hown long to wait after entering the state before returning.
+The `wait_time` parameter says how long to wait after entering the state before returning.
 This provides a simple delay within the state machine.
 This state also has only one outcome `done`.
-As shown in the rightmost image above, the `Wait_after_logging` named state instance of the `WaitState` implementation 
+As shown in the rightmost image above, the `Wait_after_logging` named state instance of the `WaitState` implementation
 sets the `wait_time` parameter to use the operator settable parameter `self.waiting_time`
 
 After exploring these views, move to the "Runtime Control" tab of the FlexBE UI.
 
-The leftmost image below shows the initial view prior to executing the behavior.  The operator can adjust the 
-`wait_time` parameter value (currently 3 seconds) here, and set the initial supervised autonomy level.  In this case 
+The leftmost image below shows the initial view prior to executing the behavior.  The operator can adjust the
+`wait_time` parameter value (currently 3 seconds) here, and set the initial supervised autonomy level.  In this case
 we block any transitions that required anything higher than "Off".
 
-> Note:  For this behavior, the `wait_time` was initially configured as `3` without a decimal point.  
+> Note:  For this behavior, the `wait_time` was initially configured as `3` without a decimal point.
 > This will require an integer value as input.  To allow for floating point values, specify with a decimal point (e.g., `3.`).
 
-The center image shows the initial `Print_Message` state with the output  blocked due to the required autonomy level.  
+The center image shows the initial `Print_Message` state with the output  blocked due to the required autonomy level.
 The system requests the operator to click on "done" transition in the oval label to enable the transition to next state.
-The "Behavior Feedback" pane shows output logged from the onboard behavior, including the "Hello World!" message originally 
+The "Behavior Feedback" pane shows output logged from the onboard behavior, including the "Hello World!" message originally
 defined on the configuration screen.  This message is also logged on the onboard terminal window where the onboard node was started.
 After clicking on the "done" transition, the current active state transitions to the `Wait_After_Logging" state as shown in the rightmost
 image below.  As this is during the wait period the output transition is shown in gray, whereas the center image shows the transition that is active highlighted in yellow.  The operator can wait for the state to finish, or can choose to preempt the state and force the "done" transition by clicking on the label oval prior to the wait time completing.  Because this state has "Off" autonomy level, the behavior will autonomously complete and return outcome "finished" as it returns to the "Start" pane shown in the leftmost image.
@@ -164,3 +152,4 @@ For the next run, try setting the autonomy level higher to "High" or "Full", whi
 
 After this, continue on to [Example 2](docs/example2.md) for a more indepth discussion of the state implementations.
 
+[Back to the overview](../docs/examples.md)

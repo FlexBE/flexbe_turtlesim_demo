@@ -12,9 +12,31 @@ We will begin our discussion with a simpler example behavior and then return to 
 
 ----
 
+### User Input
+
+This demonstration presumes you have started the [`input_action_server`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_input/flexbe_input/input_action_server.py) on the OCS computer:
+
+`ros2 run flexbe_input input_action_server`
+
+
+This `input_action_server` interacts with the [`InputState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/input_state.py).  This simple `input_action_server` demonstration is intended to provide basic functionality for limited
+primitive inputs such as numbers or `list`/`tuple`s of numbers.
+
+See [Complex Data Input](docs/complex_data_input.md) for more information about the `InputState` usage.
+
+> Note: The `InputState` makes use of the `pickle` module, and is subject to this warning from the Pickle manual:
+
+>   Warning The pickle module is not secure against erroneous or maliciously constructed data.
+>   Never unpickle data received from an untrusted or unauthenticated source.
+
+If using the `InputState` it is up to the user to protect their network from untrusted data.
+
+
+----
+
 ### `Turtlesim Rotation State Behavior`
 
-Separate from the `Turtlesim Input State Behavior` sub-behavior used by the `FlexBE Turtlesim Demo`, 
+Separate from the `Turtlesim Input State Behavior` sub-behavior used by the `FlexBE Turtlesim Demo`,
 we have provided a simpler `Turtlesim Rotation State Behavior` behavior.
 
 We will start by describing that first, you may load this behavior and execute if you wish.
@@ -22,7 +44,7 @@ We will start by describing that first, you may load this behavior and execute i
 Each FlexBE state can accept data according to specified `Input Keys`.
 These key names can be remapped to a different name at the state level.
 
-For example, the `RotateTurtleState` implementation specifies an input key called `angle` and 
+For example, the `RotateTurtleState` implementation specifies an input key called `angle` and
 an output key `duration that is passed to downstream states.
 
 ```Python
@@ -76,7 +98,7 @@ extends the capabilities of the basic `dict` object.
 
 In the `Turtlesim Rotation State Behavior` behavior, we define
 the `userdata` at the FlexBE UI Dashboard as `angle_degrees`, the desired
-angle in degrees.  In the `RotateTurtleState` editor, we specify that the required `angle` key 
+angle in degrees.  In the `RotateTurtleState` editor, we specify that the required `angle` key
 uses the remapped `angle_degrees` key value as shown below.
 
 <p float="center">
@@ -92,7 +114,7 @@ Now when the state is executed the turtle will rotate to the key value that was 
 [`RotateAbsolute`](https://docs.ros2.org/foxy/api/turtlesim/action/RotateAbsolute.html) action provided by `Turtlesim`.
 
 > Note: Normally, we suggest you stick to a consistent convention
-> for passing data, and ROS uses `radians` for angles by convention.  
+> for passing data, and ROS uses `radians` for angles by convention.
 > Here, we chose `degrees` to illustrate data conversions and for operator convenience at the UI.
 
 The `userdata` is passed to the standard `on_enter`, `execute`, and `on_exit` methods of each FlexBE state.
@@ -185,20 +207,20 @@ Additionally, FlexBE provides a simple action server with PyQt based UI window a
 
 When the FlexBE onboard `InputState` requests data of a given type, the
 UI window will open, prompt the user with the provided text, and wait for user input.
-After the user presses `Enter/Return` or clicks the `Submit` button, the data is serialized and 
+After the user presses `Enter/Return` or clicks the `Submit` button, the data is serialized and
 sent back to the `InputState` as a string of bytes data as part of the action result.
 
 > Note: The `InputState` makes use of the `pickle` module, and is subject to this warning from the Pickle manual:
 
->   Warning The pickle module is not secure against erroneous or maliciously constructed data. 
+>   Warning The pickle module is not secure against erroneous or maliciously constructed data.
 >   Never unpickle data received from an untrusted or unauthenticated source.
 
-#### Sub-behaviors with Behavior Container 
+#### Sub-behaviors with Behavior Container
 
 In the `FlexBE Turtlesim Demo` statemachine,
  the container labeled `Rotate` is itself a simple state machine;
  that is, we have a Hierarchical Finite State Machine (HFSM).
- Furthermore, it is not just a state machine as in the ["Eight"](eight_loop.md), but is in fact a separate behavior 
+ Furthermore, it is not just a state machine as in the ["Eight"](eight_loop.md), but is in fact a separate behavior
  [`Turtlesim Input State Behavior`](../flexbe_turtlesim_demo_flexbe_behaviors/flexbe_turtlesim_demo_flexbe_behaviors/turtlesim_input_state_behavior_sm.py) that can be loaded and executed in FlexBE independent of `FlexBE Turtlesim Demo` behavior.
 
 <p float="center">
@@ -206,22 +228,22 @@ In the `FlexBE Turtlesim Demo` statemachine,
   <img src="img/input_ui_running.png" alt="Input user interface pop-up from input_action_server." width="45%">
 </p>
 
-In the `InputState` configuration, we 
-  * specify result type 1 ([`BehaviorInput.Goal.REQUEST_FLOAT`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a single number from the user, 
+In the `InputState` configuration, we
+  * specify result type 1 ([`BehaviorInput.Goal.REQUEST_FLOAT`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_msgs/action/BehaviorInput.action)) to request a single number from the user,
   * specify the prompt message for the user interface
   * specify a timeout value for the `input_action_server` to become available
   * specify the output userdata key mapping
 
 > Note: For float types, we accept integer values without decimals as well.
 
-> Note: The `InputState` `timeout` refers to waiting for the action server to become available. 
+> Note: The `InputState` `timeout` refers to waiting for the action server to become available.
 > The system will wait indefinitely for the operator to respond.
 
 
 When running the sub-behavior after requesting "Rotate", the `input_action_server` will pop up the dialog shown in rightmost image,
 which displays the specified prompt and a result type prompt specified by action goal (in this case a `1` for a `float`).
 
-After submitting the value, the operator will need to confirm "received" transition if running in "Low" autonomy, the rotate state will then 
+After submitting the value, the operator will need to confirm "received" transition if running in "Low" autonomy, the rotate state will then
 execute the rotate action using the provided `userdata`.
 
 #### ROS 2 Action Interfaces
@@ -240,7 +262,7 @@ Both of these FlexBE states make use of a [`ProxyActionClient`](https://github.c
         self._client = ProxyActionClient({self._topic: RotateAbsolute},
                                          wait_duration=0.0)  # pass required clients as dict (topic: type)
 ```
-FlexBE uses "proxies" to provide a single interface for all states in a behavior.  This reduces the number of independent communication 
+FlexBE uses "proxies" to provide a single interface for all states in a behavior.  This reduces the number of independent communication
 channels that are required.
 
 Typically you create the `_client` in the constructor, and then make use of the proxy instance as needed in `on_enter`, and `execute`.
@@ -258,7 +280,7 @@ If the state exits before the goal (e.g. if operator requests preemption), then 
 ```
 ----
 
-This example discussed the use of `InputState` to provide operator data to the onboard behavior in collaborative autonomy, the use of behavior composition to define more complex behaviors, and the use of ROS 2 `action` interfaces as the main approach to interacting with 
+This example discussed the use of `InputState` to provide operator data to the onboard behavior in collaborative autonomy, the use of behavior composition to define more complex behaviors, and the use of ROS 2 `action` interfaces as the main approach to interacting with
 more computationally intensive external nodes.
 
 [Back to the overview](../README.md#selectable-transitions)

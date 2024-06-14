@@ -1,10 +1,11 @@
 # Example 5 - Priority Containers
 
-A `PriorityContainer` works with a `ConcurrencyContainer` and is designed 
+A `PriorityContainer` works with a `ConcurrencyContainer` and is designed
 to take priority over other states while it is active.
 
-The `Example 5` does not exist yet.  It is on the @todo list.
 
-#### TODO
+### To Do:
 
+- [ ] create `Example 5` demo
 
+[Back to the overview](../docs/examples.md)
