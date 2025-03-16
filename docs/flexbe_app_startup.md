@@ -3,7 +3,7 @@
 
 ## FlexBE App Installation
 
-The classic [FlexBE App](https://github.com/flexbe/flexbe_app/tree/ros2-devel) can be used as well.
+The classic [FlexBE App](https://github.com/flexbe/flexbe_app/tree/ros2-devel) can be used in older versions (pre-Jazzy 4.x) versions of the `flexbe_behavior_engine`.
 
 If building the FlexBE App from source, you must download and install the required `nwjs` binaries
 *before* you can run the FlexBE App:

@@ -23,7 +23,7 @@
     <buildtool_depend>ament_cmake</buildtool_depend>
     <buildtool_depend>ament_cmake_python</buildtool_depend>
 
-    <depend>flexbe_app</depend>
+    <depend>flexbe_webui</depend>
     <depend>flexbe_behavior_engine</depend>
     <depend>flexbe_turtlesim_demo_flexbe_states</depend>
 

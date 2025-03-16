@@ -4,8 +4,7 @@ The `Example 3` behavior constructs a HFSM with a `ConcurrencyContainer`(https:/
 
 
 After starting the FlexBE system, including both the FlexBE onboard and OCS, as
-described [here](docs/flexbe_webui_startup.md) for the FlexBE WebUI or
-the [flexbe_app](docs/flexbe_app_startup.md).
+described [here](docs/flexbe_webui_startup.md) for the FlexBE WebUI or for the older (and deprecated in Jazzy) [flexbe_app](docs/flexbe_app_startup.md).
 
 Load the `Example 3`
 behavior from the FlexBE UI dashboard.  The leftmost image below shows the

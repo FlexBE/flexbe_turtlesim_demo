@@ -4,8 +4,7 @@ The `Example 2` behavior constructs a simple state machine
 using three states.
 
 After starting the FlexBE system, including both the FlexBE onboard and OCS, as
-described [here](docs/flexbe_webui_startup.md) for the FlexBE WebUI or
-the [flexbe_app](docs/flexbe_app_startup.md).
+described [here](docs/flexbe_webui_startup.md) for the FlexBE WebUI or for the older (and deprecated in Jazzy) [flexbe_app](docs/flexbe_app_startup.md).
 
 Load the `Example 2` behavior from the FlexBE UI dashboard.  The leftmost image below shows the
 configuration dashboard after loading, and the center image shows the state machine with the
