@@ -8,4 +8,4 @@ to take priority over other states while it is active.
 
 - [ ] create `Example 5` demo
 
-[Back to the overview](../docs/examples.md)
+[Back to the overview](examples.md)

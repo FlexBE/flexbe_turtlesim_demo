@@ -4,7 +4,7 @@ The `Example 2` behavior constructs a simple state machine
 using three states.
 
 After starting the FlexBE system, including both the FlexBE onboard and OCS, as
-described [here](docs/flexbe_webui_startup.md) for the FlexBE WebUI or for the older (and deprecated in Jazzy) [flexbe_app](docs/flexbe_app_startup.md).
+described [here](flexbe_webui_startup.md) for the FlexBE WebUI or for the older (and deprecated in Jazzy) [flexbe_app](flexbe_app_startup.md).
 
 Load the `Example 2` behavior from the FlexBE UI dashboard.  The leftmost image below shows the
 configuration dashboard after loading, and the center image shows the state machine with the
@@ -246,6 +246,6 @@ Also try to force early transitions by clicking on the transition label oval.  T
 > These changes are not visible in the source folder, and will be lost if the package is rebuilt.
 > To save any changes, the updated behavior Python and xml manifest files must be copied to the source folder.
 
-After experimenting with `Example 2`, continue on to [Example 3](docs/example3.md) for a look at our first Hierarchical Finite State Machine (HFSM) using a `ConcurrencyContainter` that executes states in "parallel".
+After experimenting with `Example 2`, continue on to [Example 3](example3.md) for a look at our first Hierarchical Finite State Machine (HFSM) using a `ConcurrencyContainter` that executes states in "parallel".
 
-[Back to the overview](../docs/examples.md)
+[Back to the overview](examples.md)

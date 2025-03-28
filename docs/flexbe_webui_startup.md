@@ -43,6 +43,7 @@ Use one (and only one) of the following approaches:
 
 To run the UI, you may choose one (and only one) of either:
   * `ros2 run flexbe_webui webui_client` (Recommended)
+    * If the `webui_client` is blank, you may invoke software rendering using the `--qt_software` option
   * `python3 -m webbrowser -n http://127.0.0.1:8000`
       * Browser-based user interface
   * Use `http://127.0.0.1:8000` in your browser window
@@ -52,4 +53,4 @@ You may also run `ros2 launch flexbe_webui flexbe_ocs.launch.py headless:=true u
 to launch the `flexbe_mirror`, `be_launcher`, and `webui_node` at one time, and then
 run the UI in a seperately (e.g. `ros2 run flexbe_webui webui_client`).
 
-This is our standard mode of testing.
+This is our standard mode for testing.

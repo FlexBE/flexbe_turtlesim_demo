@@ -22,7 +22,7 @@ This demonstration presumes you have started the [`input_action_server`](https:/
 This `input_action_server` interacts with the [`InputState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/input_state.py).  This simple `input_action_server` demonstration is intended to provide basic functionality for limited
 primitive inputs such as numbers or `list`/`tuple`s of numbers.
 
-See [Complex Data Input](docs/complex_data_input.md) for more information about the `InputState` usage.
+See [Complex Data Input](complex_data_input.md) for more information about the `InputState` usage.
 
 > Note: The `InputState` makes use of the `pickle` module, and is subject to this warning from the Pickle manual:
 

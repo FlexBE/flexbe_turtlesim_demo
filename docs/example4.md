@@ -4,7 +4,7 @@ The `Example 4` behavior constructs a three-layer HFSM with the `Example 3` beha
 
 
 You may load the existing `Example 4` and run after starting the FlexBE system as
-described in [flexbe_webui](docs/flexbe_webui_startup.md) or for the older (and deprecated in Jazzy) [flexbe_app](docs/flexbe_app_startup.md).
+described in [flexbe_webui](flexbe_webui_startup.md) or for the older (and deprecated in Jazzy) [flexbe_app](flexbe_app_startup.md).
 
 Or create a new behavior and build from scratch following these directions.
 
@@ -33,4 +33,4 @@ For some examples, see these publications:
 
 
 
-[Back to the overview](../docs/examples.md)
+[Back to the overview](examples.md)

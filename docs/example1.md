@@ -3,7 +3,7 @@
 The first behavior, `Example 1`, constructs a simple state machine
 using two states provided with the FlexBE Behavior Engine.
 
-Start the FlexBE onboard and OCS as described [here](docs/flexbe_webui_startup.md) for the FlexBE WebUI or the [flexbe_app](docs/flexbe_app_startup.md). The basic directions are the same afterwards.
+Start the FlexBE onboard and OCS as described [here](flexbe_webui_startup.md) for the FlexBE WebUI or the [flexbe_app](flexbe_app_startup.md). The basic directions are the same afterwards.
 
 Load the `Example 1` behavior from the FlexBE UI dashboard as shown in the leftmost image below.  Once loaded,
 the "Behavior Dashboard" shows the behavior configuration information as shown in the center image below.
@@ -150,6 +150,6 @@ image below.  As this is during the wait period the output transition is shown i
 
 For the next run, try setting the autonomy level higher to "High" or "Full", which will allow the behavior to run to completion without the operator needed to click "done" after the log state.
 
-After this, continue on to [Example 2](docs/example2.md) for a more indepth discussion of the state implementations.
+After this, continue on to [Example 2](example2.md) for a more indepth discussion of the state implementations.
 
-[Back to the overview](../docs/examples.md)
+[Back to the overview](examples.md)
