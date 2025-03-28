@@ -287,6 +287,8 @@ Please use the following publications for reference when using FlexBE:
 
 - Joshua Zutell, David C. Conner and Philipp Schillinger, ["ROS 2-Based Flexible Behavior Engine for Flexible Navigation ,"](http://dx.doi.org/10.1109/SoutheastCon48659.2022.9764047), IEEE SouthEastCon, April 2022.
 
+- Samuel Raymond, Grace Walters, Joshua Luzier, and David C. Conner, ["Design and Development of the FlexBE WebUI with Introductory Tutorials"](https://dl.acm.org/doi/10.5555/3722479.3722523), Journal of Computing Sciences in Colleges, Volume 40, Issue 3, October 2024.
+
 -----
 
 [Turtlesim]:https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim.html
