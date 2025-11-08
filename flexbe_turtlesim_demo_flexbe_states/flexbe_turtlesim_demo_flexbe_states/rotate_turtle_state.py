@@ -24,7 +24,12 @@ from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyActionClient
 
 # example import of required action
-from turtlesim.action import RotateAbsolute
+try:
+    # Kilted and newer
+    from turtlesim_msgs.action import RotateAbsolute
+except ModuleNotFoundError:
+    # Jazzy and older
+    from turtlesim.action import RotateAbsolute
 
 
 class RotateTurtleState(EventState):

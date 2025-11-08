@@ -20,7 +20,12 @@ from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
 
-from turtlesim.srv import TeleportAbsolute
+try:
+    # Kilted and newer
+    from turtlesim_msgs.srv import TeleportAbsolute
+except ModuleNotFoundError:
+    # Jazzy and older
+    from turtlesim.srv import TeleportAbsolute
 
 
 class TeleportAbsoluteState(EventState):

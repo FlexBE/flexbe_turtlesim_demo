@@ -6,28 +6,33 @@ The "Home" sub-behavior is implemented by a sequence of states as shown below:
   <img src="img/home_editor_view.png" alt="'Home' behavior." width="45%">
 </p>
 
-This behavior is first invoked on initial entry to the `FlexBE Turtlesim Demo` behavior 
-after clearing the screen.  After that, the behavior is invoked by selecting the "Home" transition 
+This behavior is first invoked on initial entry to the `FlexBE Turtlesim Demo` behavior
+after clearing the screen.  After that, the behavior is invoked by selecting the "Home" transition
 from the "Operator" decision state shown in the monitoring view.
 
-The active state first transitions to the "GoHome" [`LogState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/log_state.py) with the message text `"Go to home position"`, then it transitions to the "Home" state instance of the [`TeleportAbsoluteState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/teleport_absolute_state.py) 
+The active state first transitions to the "GoHome" [`LogState`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_states/flexbe_states/log_state.py) with the message text `"Go to home position"`, then it transitions to the "Home" state instance of the [`TeleportAbsoluteState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/teleport_absolute_state.py)
 state implementation.  The result is then logged by either "AtHome" or "ServiceCallFailed" states, and the system transitions back to the
 "Operator" decision state.
 
 As shown in the code fragment below, the `TeleportAbsoluteState` provides a FlexBE interface to the [`TeleportAbsolute`](https://docs.ros2.org/latest/api/turtlesim/srv/TeleportAbsolute.html) service provided by the `turtlesim` node.  The node can accept the position as either input parameters in the `__init__` method invocation, or as `userdata`.
 For a more indepth discussion of `userdata` see the ["Rotate"](rotate_behavior.md) discussion.
 
-The `__init__` method constructor sets up a [`ProxyServiceCaller`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/proxy/proxy_service_caller.py) instance to handle the actual calls. FlexBE uses a number of *Proxy* interfaces 
+The `__init__` method constructor sets up a [`ProxyServiceCaller`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/proxy/proxy_service_caller.py) instance to handle the actual calls. FlexBE uses a number of *Proxy* interfaces
 to allow multiple states to share a single access point to the node for publish, subscribing, and calling interfaces to other nodes.
 The onboard system maintains a single ROS `node` as its point of access to external nodes.
 
 
-```python 
+```python
 from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
 
-from turtlesim.srv import TeleportAbsolute
+try:
+    # Kilted and newer
+    from turtlesim_msgs.action import TeleportAbsolute
+except ModuleNotFoundError:
+    # Jazzy and older
+    from turtlesim.action import TeleportAbsolute
 
 
 class TeleportAbsoluteState(EventState):
@@ -86,10 +91,10 @@ class TeleportAbsoluteState(EventState):
         self._srv = ProxyServiceCaller({self._srv_topic: TeleportAbsolute}, wait_duration=0.0)
 ```
 
-Given the above state implementation, the `FlexBE Turtlesim Demo` behavior defines an instance of this class, 
+Given the above state implementation, the `FlexBE Turtlesim Demo` behavior defines an instance of this class,
 and adds it to the top level state machine in [`flexbe_turtlesim_demo_sm.py`](../flexbe_turtlesim_demo_flexbe_behaviors/flexbe_turtlesim_demo_flexbe_behaviors/flexbe_turtlesim_demo_sm.py)
 
-A fragment of the `flexbe_turtlesim_demo_sm.py` behavior implementation is shown below.  The values assigned 
+A fragment of the `flexbe_turtlesim_demo_sm.py` behavior implementation is shown below.  The values assigned
 in the `TeleportAbsoluteState()` constructor are taken from the FlexBE editor window shown above.
 
 ```python
@@ -129,20 +134,20 @@ with _state_machine:
 
 ```
 
-For this discusion, we will stick to high level overview. For more details about the state lifecycle see the [Examples](examples.md). 
+For this discusion, we will stick to high level overview. For more details about the state lifecycle see the [Examples](examples.md).
 
 When the "Home" state becomes active the `on_enter` method of `TeleportAbsoluteState` class is called.
 If the system is using `userdata` the desired pose is extracted.  For our case, we have remapped the name `pose` to the `home` userdata defined on the behavior dashboard.  Again, for a more indepth discussion of `userdata` see the ["Rotate"](rotate_behavior.md) discussion.
 
-If this user data is not provided, then the state defaults to using the parameters defined in the by the creation 
+If this user data is not provided, then the state defaults to using the parameters defined in the by the creation
 in `flexbe_turtlebot_demo_sm` code above.
 
-The state instance makes note of the `self._start_time`, and if available the service call is invoked using an asychronous (non-blocking) 
-service call (constrast with ["Clear"](clear_behavior.md) discussion ).  
+The state instance makes note of the `self._start_time`, and if available the service call is invoked using an asychronous (non-blocking)
+service call (constrast with ["Clear"](clear_behavior.md) discussion ).
 If an exception occurs, the state `self._return` is marked as `failed`.
 
 
-```python 
+```python
     def on_enter(self, userdata):
         """
         Call this method when the state becomes active.
@@ -197,10 +202,10 @@ If an exception occurs, the state `self._return` is marked as `failed`.
 ```
 
 The `on_enter` method is called once when the state becomes the active state in the state machine after a transition.
-From there on, the FlexBE behavior executive calls the `execute` method periodically at a desired rate until something other 
+From there on, the FlexBE behavior executive calls the `execute` method periodically at a desired rate until something other
 than `None` is returned.
 
-If the service has been called, we wait for the result up until the designated timeout period has elapsed.  If the service 
+If the service has been called, we wait for the result up until the designated timeout period has elapsed.  If the service
 was not available `on_enter`, we call when it becomes available up until the designated timeout period.
 
 ```python
