@@ -9,7 +9,7 @@ params:
     y: 0.0
     theta: 0.0
     call_timeout: 1.0
-    wait_timeout: 1.0
+    wait_timeout: 0.1
 
 outcome:
     unavailable
