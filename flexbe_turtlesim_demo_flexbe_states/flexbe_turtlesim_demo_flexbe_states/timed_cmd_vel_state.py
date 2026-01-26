@@ -66,7 +66,7 @@ class TimedCmdVelState(EventState):
         # so that all states in a behavior can share a single subscription/publisher
         ProxyPublisher.initialize(TimedCmdVelState._node)  # the class must know the behavior node
         self._pub = ProxyPublisher()
-        self._pub.createPublisher(cmd_topic, Twist)
+        self._pub.create_publisher(cmd_topic, Twist)
 
     def execute(self, userdata):
         """
