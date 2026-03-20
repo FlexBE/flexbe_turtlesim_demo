@@ -25,8 +25,6 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'example_behavior_sm = flexbe_turtlesim_demo_flexbe_behaviors.example_behavior_sm',
-            'simple_turtlesim_behavior_sm = flexbe_turtlesim_demo_flexbe_behaviors.simple_turtlesim_behavior_sm',
             'turn_rate = flexbe_turtlesim_demo_flexbe_behaviors.turn_rate:turn_rate'
         ],
     },

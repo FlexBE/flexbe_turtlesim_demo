@@ -30,10 +30,6 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'example_action_state = flexbe_turtlesim_demo_flexbe_states.example_action_state',
-            'example_state = flexbe_turtlesim_demo_flexbe_states.example_state',
-            'timed_twist_state = flexbe_turtlesim_demo_flexbe_states.timed_twist_state',
-            'teleport_absolute_state = flexbe_turtlesim_demo_flexbe_states.teleport_absolute_state',
         ],
     },
 )

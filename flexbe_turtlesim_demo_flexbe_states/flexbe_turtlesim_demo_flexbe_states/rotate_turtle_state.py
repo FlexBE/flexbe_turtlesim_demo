@@ -18,6 +18,7 @@
 
 import math
 
+from action_msgs.msg import GoalStatus
 from rclpy.duration import Duration
 
 from flexbe_core import EventState, Logger
@@ -82,6 +83,8 @@ class RotateTurtleState(EventState):
         self._error = False
         self._return = None  # Retain return value in case the outcome is blocked by operator
         self._start_time = None
+        self._goal_sent = False
+        self._goal = None
 
     def on_start(self):
         self._client = ProxyActionClient({self._topic: RotateAbsolute}, wait_duration=0.0)
@@ -101,18 +104,51 @@ class RotateTurtleState(EventState):
             # Return prior outcome in case transition is blocked by autonomy level
             return self._return
 
-        # Check if the action has been finished
-        if self._client.has_result(self._topic):
-            _ = self._client.get_result(self._topic)  # The delta result value is not useful here
-            userdata.duration = self._node.get_clock().now() - self._start_time
-            Logger.loginfo('Rotation complete')
-            self._return = 'rotation_complete'
-            return self._return
 
-        if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._timeout.nanoseconds:
-            # Checking for timeout after we check for goal response
-            self._return = 'timeout'
-            return 'timeout'
+        elapsed = self._node.get_clock().now() - self._start_time
+
+        if not self._goal_sent:
+            try:
+                if self._client.is_available(self._topic):
+                    self._client.send_goal(self._topic, self._goal, wait_duration=0.0)
+                    self._goal_sent = True
+                elif elapsed > self._timeout:
+                    Logger.logwarn(f"Timeout waiting for action server!")
+                    self._return = 'timeout'
+                    return self._return
+                return None
+            except Exception as exc:  # pylint: disable=W0703
+                # Since a state failure not necessarily causes a behavior failure,
+                # it is recommended to only print warnings, not errors.
+                # Using a linebreak before appending the error log enables the operator to collapse details in the GUI.
+                Logger.logwarn(f"Failed to send the RotateAbsolute command:\n  {type(exc)} - {exc}")
+                self._error = True
+        else:
+            # Check if the action has been finished
+            status = self._client.get_status(self._topic)
+            if status == GoalStatus.STATUS_CANCELED:
+                Logger.loginfo('Rotation goal was canceled')
+                self._return = 'canceled'
+                return self._return
+            if status == GoalStatus.STATUS_ABORTED:
+                Logger.logwarn('Rotation goal was aborted')
+                self._return = 'failed'
+                return self._return
+
+            if self._client.has_result(self._topic):
+                _ = self._client.get_result(self._topic)  # The delta result value is not useful here
+                status = self._client.get_status(self._topic)
+                if status == GoalStatus.STATUS_SUCCEEDED:
+                    userdata.duration = self._node.get_clock().now() - self._start_time
+                    Logger.loginfo('Rotation complete')
+                    self._return = 'rotation_complete'
+                    return self._return
+
+            if elapsed > self._timeout:
+                # Checking for timeout after we check for goal response
+                self._return = 'timeout'
+                Logger.logwarn(f"Timeout waiting for action response!")
+                return 'timeout'
 
         # If the action has not yet finished, no outcome will be returned and the state stays active.
         return None
@@ -122,6 +158,7 @@ class RotateTurtleState(EventState):
         # make sure to reset the error state since a previous state execution might have failed
         self._error = False
         self._return = None
+        self._goal_sent = False
 
         if 'angle' not in userdata:
             self._error = True
@@ -135,24 +172,16 @@ class RotateTurtleState(EventState):
 
         if isinstance(userdata.angle, (float, int)):
             goal.theta = (userdata.angle * math.pi) / 180  # convert to radians
+            self._goal = goal
         else:
             self._error = True
             Logger.logwarn("Input is %s. Expects an int or a float.", type(userdata.angle).__name__)
 
-        # Send the goal.
-        try:
-            self._client.send_goal(self._topic, goal, wait_duration=self._timeout_sec)
-        except Exception as exc:  # pylint: disable=W0703
-            # Since a state failure not necessarily causes a behavior failure,
-            # it is recommended to only print warnings, not errors.
-            # Using a linebreak before appending the error log enables the operator to collapse details in the GUI.
-            Logger.logwarn(f"Failed to send the RotateAbsolute command:\n  {type(exc)} - {exc}")
-            self._error = True
-
     def on_exit(self, userdata):
         # Make sure that the action is not running when leaving this state.
-        # A situation where the action would still be active is for example when the operator manually triggers an outcome.
+        # A situation where the action would still be active is for example
+        # when the operator manually triggers an outcome.
 
-        if not self._client.has_result(self._topic):
+        if self._goal_sent and not self._client.has_result(self._topic):
             self._client.cancel(self._topic)
             Logger.loginfo('Cancelled active action goal.')
