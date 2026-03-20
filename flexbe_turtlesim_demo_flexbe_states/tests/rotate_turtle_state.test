@@ -11,4 +11,4 @@ input:
     angle: 2.
 
 outcome:
-    failed
+    timeout
