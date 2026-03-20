@@ -60,6 +60,7 @@ class TimedCmdVelState(EventState):
         self._twist = Twist()
         self._twist.linear.x = velocity
         self._twist.angular.z = rotation_rate
+        self._stop_twist = Twist()
         self._cmd_topic = cmd_topic
 
         # FlexBE uses "proxies" for publishers, subscribers, and service callers
@@ -77,9 +78,7 @@ class TimedCmdVelState(EventState):
         if self._return:
             # We have completed the state, and therefore must be blocked by autonomy level
             # Stop the robot, but and return the prior outcome
-            if self._cmd_topic:
-                self._pub.publish(self._cmd_topic, Twist())
-
+            self._publish_stop()
             return self._return
 
         if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._target_time.nanoseconds:
@@ -105,3 +104,21 @@ class TimedCmdVelState(EventState):
         """
         self._start_time = self._node.get_clock().now()
         self._return = None  # reset the completion flag
+
+    def on_pause(self):
+        """Stop motion while the behavior is paused with this state active."""
+        self._publish_stop()
+
+    def on_exit(self, userdata):
+        """Stop motion if this state is interrupted before its normal completion."""
+        if self._return is None:
+            self._publish_stop()
+
+    def on_stop(self):
+        """Stop motion whenever the behavior stops or is preempted."""
+        self._publish_stop()  # Note, this happens regardless of whether this state is active
+
+    def _publish_stop(self):
+        """Publish a zero twist when we need to stop an in-flight open-loop command."""
+        if self._cmd_topic:
+            self._pub.publish(self._cmd_topic, self._stop_twist)
