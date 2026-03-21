@@ -53,7 +53,19 @@ In the `InputState` configuration, we
 The `TeleportAbsoluteState` extracts the pose data from the userdata and makes the non-blocking service call as described in ["Home"](home_behavior.md).
 
 ```python
-        if 'pose' in userdata and isinstance(userdata.pose, (list, tuple)):
+        if 'pose' in userdata:
+            if not isinstance(userdata.pose, (list, tuple)):
+                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
+                               "needs list of 2 or 3 numbers!")
+                self._return = 'failed'
+                return
+
+            if len(userdata.pose) not in (2, 3):
+                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
+                               "needs list of 2 or 3 numbers!")
+                self._return = 'failed'
+                return
+
             try:
                 self._srv_request.x = float(userdata.pose[0])
                 self._srv_request.y = float(userdata.pose[1])

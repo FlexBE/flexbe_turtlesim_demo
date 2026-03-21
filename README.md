@@ -37,7 +37,7 @@ with the FlexBE UI and Behavior Engine installations.
 Install any required dependencies.
 
   * `rosdep update`
-  * `rosdep install --from-paths src --ignore-src`WebUI
+  * `rosdep install --from-paths src --ignore-src -y`
 
 
 Build your workspace:

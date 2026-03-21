@@ -17,9 +17,11 @@ state implementation.  The result is then logged by either "AtHome" or "ServiceC
 As shown in the code fragment below, the `TeleportAbsoluteState` provides a FlexBE interface to the [`TeleportAbsolute`](https://docs.ros2.org/latest/api/turtlesim/srv/TeleportAbsolute.html) service provided by the `turtlesim` node.  The node can accept the position as either input parameters in the `__init__` method invocation, or as `userdata`.
 For a more indepth discussion of `userdata` see the ["Rotate"](rotate_behavior.md) discussion.
 
-The `__init__` method constructor sets up a [`ProxyServiceCaller`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/proxy/proxy_service_caller.py) instance to handle the actual calls. FlexBE uses a number of *Proxy* interfaces
-to allow multiple states to share a single access point to the node for publish, subscribing, and calling interfaces to other nodes.
-The onboard system maintains a single ROS `node` as its point of access to external nodes.
+The constructor configures the request object and timeout behavior, while `on_start()` sets up the
+[`ProxyServiceCaller`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/proxy/proxy_service_caller.py)
+instance that handles the actual calls. FlexBE uses a number of *Proxy* interfaces to allow multiple states to share
+a single access point to the node for publish, subscribing, and calling interfaces to other nodes. The onboard system
+maintains a single ROS `node` as its point of access to external nodes.
 
 
 ```python
@@ -29,10 +31,10 @@ from flexbe_core.proxy import ProxyServiceCaller
 
 try:
     # Kilted and newer
-    from turtlesim_msgs.action import TeleportAbsolute
+    from turtlesim_msgs.srv import TeleportAbsolute
 except ModuleNotFoundError:
     # Jazzy and older
-    from turtlesim.action import TeleportAbsolute
+    from turtlesim.srv import TeleportAbsolute
 
 
 class TeleportAbsoluteState(EventState):
@@ -86,7 +88,9 @@ class TeleportAbsoluteState(EventState):
         self._srv_request.theta = theta
 
         self._error = None
+        self._srv = None
 
+    def on_start(self):
         # Set up the proxy now, but do not wait on the service just yet
         self._srv = ProxyServiceCaller({self._srv_topic: TeleportAbsolute}, wait_duration=0.0)
 ```
@@ -155,7 +159,23 @@ If an exception occurs, the state `self._return` is marked as `failed`.
         i.e. a transition from another state to this one is taken.
         """
 
-        if 'pose' in userdata and isinstance(userdata.pose, (list, tuple)):
+        self._return = None  # reset the completion flag
+        self._service_called = False
+        self._start_time = None
+
+        if 'pose' in userdata:
+            if not isinstance(userdata.pose, (list, tuple)):
+                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
+                               "needs list of 2 or 3 numbers!")
+                self._return = 'failed'
+                return
+
+            if len(userdata.pose) not in (2, 3):
+                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
+                               "needs list of 2 or 3 numbers!")
+                self._return = 'failed'
+                return
+
             try:
                 self._srv_request.x = float(userdata.pose[0])
                 self._srv_request.y = float(userdata.pose[1])
@@ -177,8 +197,6 @@ If an exception occurs, the state `self._return` is marked as `failed`.
                              f"angle={self._srv_request.theta:.3f} radians")
 
         self._start_time = self._node.get_clock().now()
-        self._return = None  # reset the completion flag
-        self._service_called = False
         try:
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
                 self._do_service_call()
@@ -250,4 +268,3 @@ This example has demonstrated using an asynchronous service call within FlexBE.
 For comparison with a blocking service call, see the ["Clear"](clear_behavior.md) discussion.
 
 [Back to the overview](../README.md#selectable-transitions)
-
