@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,15 +33,15 @@ def turn_rate():
     fwd_distance_traveled = 2.0  # m
     desired_radius_of_curvature = 0.75  # meters
 
-    print(f"Desired velocity = {desired_velocity:.3f} m/s")
-    print(f"Desired Forward travel  = {fwd_distance_traveled:.3f} m/s")
-    print(f"Desired radius of curvature  = {desired_radius_of_curvature:.3f} m")
+    print(f'Desired velocity = {desired_velocity:.3f} m/s')
+    print(f'Desired Forward travel  = {fwd_distance_traveled:.3f} m/s')
+    print(f'Desired radius of curvature  = {desired_radius_of_curvature:.3f} m')
 
     fwd_travel_time = fwd_distance_traveled / desired_velocity
     rate_of_turn = desired_velocity / desired_radius_of_curvature
 
-    print(f"Required Forward travel time  = {fwd_travel_time:.3f} seconds")
-    print(f"Required Rate of turn    = {rate_of_turn:.3f} radians/s")
+    print(f'Required Forward travel time  = {fwd_travel_time:.3f} seconds')
+    print(f'Required Rate of turn    = {rate_of_turn:.3f} radians/s')
 
     # Angle between lines connecting the center of rotation to starting point and initial tangent point at start of turn
     bisecting_angle = math.pi / 2 - math.atan2(desired_radius_of_curvature, fwd_distance_traveled)
@@ -49,7 +49,7 @@ def turn_rate():
     # Total turning angle
     turning_angle = 2 * math.pi - 2 * bisecting_angle
     turning_travel_time = turning_angle / rate_of_turn
-    print(f"Required turning time   = {turning_travel_time:.3f} seconds")
+    print(f'Required turning time   = {turning_travel_time:.3f} seconds')
 
 
 if __name__ == '__main__':

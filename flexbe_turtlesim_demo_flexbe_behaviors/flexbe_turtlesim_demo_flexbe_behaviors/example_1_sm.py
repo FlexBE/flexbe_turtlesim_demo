@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ Created on Fri Aug 21 2015
 @author: Philipp Schillinger
 """
 
-from flexbe_core import Behavior, Autonomy, OperatableStateMachine, Logger
+from flexbe_core import Autonomy, Behavior, Logger, OperatableStateMachine
+
 from flexbe_states.log_state import LogState
 from flexbe_states.wait_state import WaitState
 # Additional imports can be added inside the following tags
@@ -41,6 +42,7 @@ class Example1SM(Behavior):
     """This is a simple example for a behavior."""
 
     def __init__(self, node):
+        """Initialize ROS resources and configurable parameters for the behavior."""
         super().__init__()
         self.name = 'Example 1'
         self.node = node
@@ -65,7 +67,8 @@ class Example1SM(Behavior):
         # This transition will only be executed if the Autonomy Level is greater than Low during execution, e.g. High
 
     def create(self):
-        log_msg = "Hello World!"
+        """Build the behavior state machine."""
+        log_msg = 'Hello World!'
         # x:83 y:390
         _state_machine = OperatableStateMachine(outcomes=['finished'])
 

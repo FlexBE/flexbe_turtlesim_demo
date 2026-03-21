@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2023 David Conner
+# Copyright 2026 David Conner
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,13 +30,10 @@ Created on Wed Jul 05 2023
 """
 
 
-from flexbe_core import Autonomy
-from flexbe_core import Behavior
-from flexbe_core import ConcurrencyContainer
-from flexbe_core import Logger
-from flexbe_core import OperatableStateMachine
-from flexbe_core import PriorityContainer
+from flexbe_core import Autonomy, Behavior, ConcurrencyContainer, Logger, OperatableStateMachine, PriorityContainer
+
 from flexbe_states.log_state import LogState
+
 from flexbe_turtlesim_demo_flexbe_behaviors.example_3_sm import Example3SM
 
 # Additional imports can be added inside the following tags
@@ -56,6 +53,7 @@ class Example4SM(Behavior):
     """
 
     def __init__(self, node):
+        """Initialize ROS resources and nested behavior usage."""
         super().__init__()
         self.name = 'Example 4'
 
@@ -77,6 +75,7 @@ class Example4SM(Behavior):
         # Behavior comments:
 
     def create(self):
+        """Build the behavior state machine."""
         # x:718 y:163, x:712 y:285
         _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
 
@@ -87,26 +86,26 @@ class Example4SM(Behavior):
         with _state_machine:
             # x:61 y:124
             OperatableStateMachine.add('A',
-                                       LogState(text="Enter top-level", severity=Logger.REPORT_HINT),
+                                       LogState(text='Enter top-level', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Example Concurrent Behavior'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:529 y:153
             OperatableStateMachine.add('B',
-                                       LogState(text="top-level finished", severity=Logger.REPORT_HINT),
+                                       LogState(text='top-level finished', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'finished'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:519 y:267
             OperatableStateMachine.add('C',
-                                       LogState(text="top-level failed", severity=Logger.REPORT_HINT),
+                                       LogState(text='top-level failed', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'failed'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:208 y:179
             OperatableStateMachine.add('Example Concurrent Behavior',
                                        self.use_behavior(Example3SM, 'Example Concurrent Behavior',
-                                           parameters={'waiting_time_a': 5.0}),
+                                                         parameters={'waiting_time_a': 5.0}),
                                        transitions={'finished': 'B', 'failed': 'C'},
                                        autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit})
 

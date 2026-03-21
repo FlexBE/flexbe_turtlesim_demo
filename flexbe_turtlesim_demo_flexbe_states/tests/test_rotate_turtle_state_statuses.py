@@ -32,9 +32,10 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from action_msgs.msg import GoalStatus
-from rclpy.duration import Duration
 
 from flexbe_turtlesim_demo_flexbe_states.rotate_turtle_state import RotateTurtleState
+
+from rclpy.duration import Duration
 
 
 class _FakeElapsed:

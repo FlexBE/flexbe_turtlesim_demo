@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,10 +15,11 @@
 # limitations under the License.
 
 """Demonstration state."""
-from rclpy.constants import S_TO_NS
-from rclpy.duration import Duration
 
 from flexbe_core import EventState, Logger
+
+from rclpy.constants import S_TO_NS
+from rclpy.duration import Duration
 
 
 class ExampleState(EventState):
@@ -63,34 +64,34 @@ class ExampleState(EventState):
     @property
     def elapsed_seconds(self):
         """Log elapsed time since start as simple string."""
-        return f"{self._elapsed_time.nanoseconds / S_TO_NS:.3f}"
+        return f'{self._elapsed_time.nanoseconds / S_TO_NS:.3f}'
 
     @property
     def target_seconds(self):
         """Log target wait time as a simple string."""
-        return f"{self._target_wait_time.nanoseconds / S_TO_NS:.3f}"
+        return f'{self._target_wait_time.nanoseconds / S_TO_NS:.3f}'
 
     @property
     def start_time(self):
         """Log state start time (NOT enter time!) as a simple string."""
-        return f"{self._state_start_time.nanoseconds / S_TO_NS:.3f}"
+        return f'{self._state_start_time.nanoseconds / S_TO_NS:.3f}'
 
     @property
     def enter_time(self):
         """Log state enter time as a simple string."""
-        return f"{self._state_enter_time.nanoseconds / S_TO_NS:.3f}"
+        return f'{self._state_enter_time.nanoseconds / S_TO_NS:.3f}'
 
     @property
     def exit_time(self):
         """Log state exit time as a simple string."""
-        return f"{self._state_exit_time.nanoseconds / S_TO_NS:.3f}"
+        return f'{self._state_exit_time.nanoseconds / S_TO_NS:.3f}'
 
     @property
     def clock_time(self):
         """Log system time in 1 hour increments using simple string."""
         time_msg = self._node.get_clock().now().to_msg()
         time = time_msg.sec % 3600 + time_msg.nanosec / S_TO_NS
-        return f"{time:.3f}"
+        return f'{time:.3f}'
 
     # Standard methods of EventState
     # Normally we override on_enter, execute, and on_exit.
@@ -109,7 +110,7 @@ class ExampleState(EventState):
 
             # Local info is NOT sent to the UI, and only shown in logs and terminal
             Logger.localinfo(f"execute blocked for '{self._name}' state ({self.path}) @ {self.clock_time} "
-                             f"- use prior return code={self._return}")
+                             f'- use prior return code={self._return}')
             return self._return
 
         # Normal calculation block
@@ -117,19 +118,19 @@ class ExampleState(EventState):
             self._elapsed_time = ExampleState._node.get_clock().now() - self._state_enter_time
             if self._elapsed_time >= self._target_wait_time:
                 Logger.loginfo(f"execute for '{self._name}' state ({self.path}) @ {self.clock_time} "
-                               f"- done waiting at {self.elapsed_seconds} seconds.")
+                               f'- done waiting at {self.elapsed_seconds} seconds.')
                 self._return = 'done'
                 return 'done'  # One of the outcomes declared above.
-        except Exception:  # pylint:disable=W0703
+        except (AttributeError, RuntimeError, TypeError, ValueError):
             # Something went wrong
             Logger.logerr(f"execute for '{self._name}' state ({self.path}) @ {self.clock_time} "
-                          f"- something went wrong after {self.elapsed_seconds} seconds.")
+                          f'- something went wrong after {self.elapsed_seconds} seconds.')
             self._return = 'failed'
             return 'failed'
 
         # Local info is NOT sent to the UI, and only shown in logs and terminal
         Logger.localinfo(f"execute for '{self._name}' state ({self.path}) @ {self.clock_time} "
-                         f"- {self.elapsed_seconds} seconds since start.")
+                         f'- {self.elapsed_seconds} seconds since start.')
         return None  # This is normal behavior for state to continue executing
 
     def on_enter(self, userdata):
@@ -147,7 +148,7 @@ class ExampleState(EventState):
         self._return = None  # Clear return code on entry
 
         Logger.loginfo(f"on_enter for '{self._name}' state ({self.path}) @ {self.clock_time} "
-                       f"- need to wait for {self.target_seconds} seconds.")
+                       f'- need to wait for {self.target_seconds} seconds.')
 
     def on_exit(self, userdata):
         """
@@ -158,7 +159,7 @@ class ExampleState(EventState):
         """
         self._state_exit_time = ExampleState._node.get_clock().now()
         Logger.loginfo(f"on_exit for '{self._name}' state ({self.path}) @ {self.clock_time} "
-                       f"elapsed time = {self.elapsed_seconds} seconds.")
+                       f'elapsed time = {self.elapsed_seconds} seconds.')
 
     def on_start(self):
         """
@@ -170,7 +171,7 @@ class ExampleState(EventState):
         """
         self._state_start_time = ExampleState._node.get_clock().now()
         Logger.loginfo(f"on_start for '{self._name}' state ({self.path}) @ {self.start_time} seconds "
-                       f" time to wait = {self.target_seconds} seconds..")
+                       f' time to wait = {self.target_seconds} seconds..')
 
     def on_stop(self):
         """
@@ -181,14 +182,14 @@ class ExampleState(EventState):
         """
         self._elapsed_time = ExampleState._node.get_clock().now() - self._state_start_time
         Logger.loginfo(f"on_stop for '{self._name}' state ({self.path}) @ {self.clock_time} seconds "
-                       f" total behavior instance elapsed time = {self.elapsed_seconds} seconds ")
+                       f' total behavior instance elapsed time = {self.elapsed_seconds} seconds ')
         if self._state_enter_time is None:
             Logger.loginfo(f"on_stop for '{self._name}' state ({self.path}) @ {self.clock_time} seconds "
-                           f" - never entered the state to execute! ")
+                           f' - never entered the state to execute! ')
         else:
             try:
                 self._elapsed_time = self._state_exit_time - self._state_enter_time
                 Logger.loginfo(f"    '{self._name}' state "
-                               f"was active (enter-to-exit) for {self.elapsed_seconds} seconds.")
-            except Exception:  # pylint: disable=W0703
-                Logger.logerr(f"  entered at time={self.enter_time} seconds but never exited!")
+                               f'was active (enter-to-exit) for {self.elapsed_seconds} seconds.')
+            except (AttributeError, RuntimeError, TypeError, ValueError):
+                Logger.logerr(f'  entered at time={self.enter_time} seconds but never exited!')

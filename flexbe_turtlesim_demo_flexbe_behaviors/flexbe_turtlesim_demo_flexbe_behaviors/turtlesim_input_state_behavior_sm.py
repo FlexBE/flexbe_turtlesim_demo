@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2023 Collin Stone
+# Copyright 2026 Collin Stone
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,14 +30,11 @@ Created on Mon Jul 17 2023
 """
 
 
-from flexbe_core import Autonomy
-from flexbe_core import Behavior
-from flexbe_core import ConcurrencyContainer
-from flexbe_core import Logger
-from flexbe_core import OperatableStateMachine
-from flexbe_core import PriorityContainer
+from flexbe_core import Autonomy, Behavior, ConcurrencyContainer, Logger, OperatableStateMachine, PriorityContainer
+
 from flexbe_states.input_state import InputState
 from flexbe_states.log_state import LogState
+
 from flexbe_turtlesim_demo_flexbe_states.rotate_turtle_state import RotateTurtleState
 
 # Additional imports can be added inside the following tags
@@ -56,6 +53,7 @@ class TurtlesimInputStateBehaviorSM(Behavior):
     """
 
     def __init__(self, node):
+        """Initialize ROS resources for the input-driven rotate demo."""
         super().__init__()
         self.name = 'Turtlesim Input State Behavior'
 
@@ -78,6 +76,7 @@ class TurtlesimInputStateBehaviorSM(Behavior):
         # Behavior comments:
 
     def create(self):
+        """Build the behavior state machine."""
         # x:1021 y:289, x:1259 y:249
         _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
 
@@ -88,7 +87,7 @@ class TurtlesimInputStateBehaviorSM(Behavior):
         with _state_machine:
             # x:202 y:136
             OperatableStateMachine.add('InputState',
-                                       InputState(request=1, message="Enter an angle (degrees): "),
+                                       InputState(request=1, message='Enter an angle (degrees): '),
                                        transitions={'received': 'RotateTurtleState', 'aborted': 'Aborted',
                                                     'no_connection': 'No Connection', 'data_error': 'Data Error'},
                                        autonomy={'received': Autonomy.Low, 'aborted': Autonomy.Off,
@@ -97,31 +96,31 @@ class TurtlesimInputStateBehaviorSM(Behavior):
 
             # x:760 y:531
             OperatableStateMachine.add('Canceled',
-                                       LogState(text="Canceled", severity=Logger.REPORT_WARN),
+                                       LogState(text='Canceled', severity=Logger.REPORT_WARN),
                                        transitions={'done': 'failed'},
                                        autonomy={'done': Autonomy.Low})
 
             # x:452 y:243
             OperatableStateMachine.add('Data Error',
-                                       LogState(text="Data Error", severity=Logger.REPORT_WARN),
+                                       LogState(text='Data Error', severity=Logger.REPORT_WARN),
                                        transitions={'done': 'failed'},
                                        autonomy={'done': Autonomy.Low})
 
             # x:761 y:434
             OperatableStateMachine.add('Failed',
-                                       LogState(text="Failed", severity=Logger.REPORT_WARN),
+                                       LogState(text='Failed', severity=Logger.REPORT_WARN),
                                        transitions={'done': 'failed'},
                                        autonomy={'done': Autonomy.Low})
 
             # x:453 y:137
             OperatableStateMachine.add('No Connection',
-                                       LogState(text="No Connection", severity=Logger.REPORT_WARN),
+                                       LogState(text='No Connection', severity=Logger.REPORT_WARN),
                                        transitions={'done': 'failed'},
                                        autonomy={'done': Autonomy.Low})
 
             # x:453 y:336
             OperatableStateMachine.add('RotateTurtleState',
-                                       RotateTurtleState(timeout=10, action_topic="/turtle1/rotate_absolute"),
+                                       RotateTurtleState(timeout=10, action_topic='/turtle1/rotate_absolute'),
                                        transitions={'rotation_complete': 'Rotation Complete', 'failed': 'Failed',
                                                     'canceled': 'Canceled', 'timeout': 'Timeout'},
                                        autonomy={'rotation_complete': Autonomy.Off, 'failed': Autonomy.Off,
@@ -130,19 +129,19 @@ class TurtlesimInputStateBehaviorSM(Behavior):
 
             # x:760 y:335
             OperatableStateMachine.add('Rotation Complete',
-                                       LogState(text="Rotation Successful", severity=Logger.REPORT_HINT),
+                                       LogState(text='Rotation Successful', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'finished'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:758 y:627
             OperatableStateMachine.add('Timeout',
-                                       LogState(text="Timeout", severity=Logger.REPORT_WARN),
+                                       LogState(text='Timeout', severity=Logger.REPORT_WARN),
                                        transitions={'done': 'failed'},
                                        autonomy={'done': Autonomy.Low})
 
             # x:457 y:10
             OperatableStateMachine.add('Aborted',
-                                       LogState(text="Aborted", severity=Logger.REPORT_WARN),
+                                       LogState(text='Aborted', severity=Logger.REPORT_WARN),
                                        transitions={'done': 'failed'},
                                        autonomy={'done': Autonomy.Low})
 

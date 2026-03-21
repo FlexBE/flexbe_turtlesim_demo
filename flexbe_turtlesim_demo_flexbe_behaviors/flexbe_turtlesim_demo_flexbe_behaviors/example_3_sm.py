@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,14 +37,11 @@ Created on Thursday 30-June-2023
 """
 
 
-from flexbe_core import Autonomy
-from flexbe_core import Behavior
-from flexbe_core import ConcurrencyContainer
-from flexbe_core import Logger
-from flexbe_core import OperatableStateMachine
-from flexbe_core import PriorityContainer
+from flexbe_core import Autonomy, Behavior, ConcurrencyContainer, Logger, OperatableStateMachine, PriorityContainer
+
 from flexbe_states.log_state import LogState
 from flexbe_states.wait_state import WaitState
+
 from flexbe_turtlesim_demo_flexbe_states.example_state import ExampleState as flexbe_turtlesim_demo_flexbe_states__ExampleState
 
 # Additional imports can be added inside the following tags
@@ -63,6 +60,7 @@ class Example3SM(Behavior):
     """
 
     def __init__(self, node):
+        """Initialize ROS resources and concurrent state parameters."""
         super().__init__()
         self.name = 'Example Concurrent Behavior'
 
@@ -99,8 +97,9 @@ class Example3SM(Behavior):
         # Either A or B returning outcome will exit this concurrent container since we are using single connections!
 
     def create(self):
-        start_msg = "Demo started!"
-        done_msg = "Demo finished!"
+        """Build the behavior state machine."""
+        start_msg = 'Demo started!'
+        done_msg = 'Demo finished!'
         # x:920 y:78, x:909 y:171
         _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
 
@@ -176,13 +175,13 @@ class Example3SM(Behavior):
 
             # x:424 y:107
             OperatableStateMachine.add('EnterAnd',
-                                       LogState(text="Enter the AND Concurrent state ...", severity=Logger.REPORT_HINT),
+                                       LogState(text='Enter the AND Concurrent state ...', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Container_AND'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:750 y:301
             OperatableStateMachine.add('Failed',
-                                       LogState(text="Failure encountered", severity=Logger.REPORT_ERROR),
+                                       LogState(text='Failure encountered', severity=Logger.REPORT_ERROR),
                                        transitions={'done': 'failed'},
                                        autonomy={'done': Autonomy.High})
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 """clear turtlesim FlexBE state."""
 
-from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
+
+from rclpy.duration import Duration
 
 from std_srvs.srv import Empty
 
@@ -39,7 +40,7 @@ class ClearTurtlesimState(EventState):
     """
 
     def __init__(self, service_name='/clear', wait_timeout=3.0):
-        # Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
+        """Set up the clear service state and its timeout behavior."""
         super().__init__(outcomes=['done', 'failed', 'unavailable'])
 
         ProxyServiceCaller.initialize(ClearTurtlesimState._node)
@@ -62,16 +63,18 @@ class ClearTurtlesimState(EventState):
         self._srv = None
 
     def on_start(self):
+        """Create the service proxy when the behavior starts."""
         # Set up the proxy now, but do not wait on the service just yet
         self._srv = ProxyServiceCaller({self._srv_topic: Empty}, wait_duration=0.0)
 
     def on_stop(self):
+        """Remove the shared service proxy when the behavior stops."""
         # Remove the proxy client if no longer in use
         ProxyServiceCaller.remove_client(self._srv_topic)
         self._srv = None
 
-
     def execute(self, userdata):
+        """Monitor service availability and publish the cached outcome."""
         # Execute this method periodically while the state is active.
         # If no outcome is returned, the state will stay active.
 
@@ -84,7 +87,7 @@ class ClearTurtlesimState(EventState):
             # Called from on_enter
             # Logger.localinfo(f"{self._name}: Service called  - check result {self._srv_result} .")
             if self._srv_result is None:
-                Logger.loginfo(f"{self._name}: Service {self._srv_topic} failed to return result!")
+                Logger.loginfo(f'{self._name}: Service {self._srv_topic} failed to return result!')
                 self._return = 'failed'
             else:
                 self._return = 'done'
@@ -93,10 +96,10 @@ class ClearTurtlesimState(EventState):
             # Waiting for service to become available in non-blocking manner
             # Logger.localinfo(f"{self._name}: Service not called - check if {self._srv_topic} is available now ...")
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
-                Logger.localinfo(f"{self._name}: Service {self._srv_topic} is now available - making service call to clear!")
+                Logger.localinfo(f'{self._name}: Service {self._srv_topic} is now available - making service call to clear!')
                 self._do_service_call()
                 if self._srv_result is None:
-                    Logger.logerr(f"{self._name}: Service {self._srv_topic} failed to return result!")
+                    Logger.logerr(f'{self._name}: Service {self._srv_topic} failed to return result!')
                     self._return = 'failed'
                 else:
                     self._return = 'done'
@@ -104,7 +107,7 @@ class ClearTurtlesimState(EventState):
                 if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._wait_timeout.nanoseconds:
                     # Failed to return call in timely manner
                     self._return = 'unavailable'
-                    Logger.logerr(f"{self._name}: Service {self._srv_topic} is unavailable!")
+                    Logger.logerr(f'{self._name}: Service {self._srv_topic} is unavailable!')
 
         return self._return
 
@@ -122,19 +125,19 @@ class ClearTurtlesimState(EventState):
         self._service_called = False
         try:
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
-                Logger.localinfo(f"{self._name}: Service {self._srv_topic} is available ...")
+                Logger.localinfo(f'{self._name}: Service {self._srv_topic} is available ...')
                 self._do_service_call()
             else:
-                Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
-        except Exception as exc:  # pylint: disable=W0703
-            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
+                Logger.logwarn(f'{self._name}: Service {self._srv_topic} is not yet available ...')
+        except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            Logger.logerr(f'{self._name}: Service {self._srv_topic} exception {type(exc)} - {exc}')
 
     def _do_service_call(self):
         """Make the service call using synchronous blocking call."""
         try:
-            Logger.localinfo(f"{self._name}: Calling service {self._srv_topic} ...")
+            Logger.localinfo(f'{self._name}: Calling service {self._srv_topic} ...')
             self._service_called = True
             self._srv_result = self._srv.call(self._srv_topic, self._srv_request, wait_duration=0.0)
-        except Exception as exc:  # pylint: disable=W0703
-            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
+        except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            Logger.logerr(f'{self._name}: Service {self._srv_topic} exception {type(exc)} - {exc}')
             self._srv_result = None

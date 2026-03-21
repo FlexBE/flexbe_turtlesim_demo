@@ -1,4 +1,4 @@
-# Copyright 2023 Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -43,9 +43,9 @@ class TestFlexBETurtleSimDemoStates(PyTester):
 
     @classmethod
     def setUpClass(cls):
-
-        PyTester._package = "flexbe_turtlesim_demo_flexbe_states"
-        PyTester._tests_folder = "tests"
+        """Point PyTester at the installed test assets for this package."""
+        PyTester._package = 'flexbe_turtlesim_demo_flexbe_states'
+        PyTester._tests_folder = 'tests'
 
         PyTester.setUpClass()  # Do this last after setting package and tests folder
 

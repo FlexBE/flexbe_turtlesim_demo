@@ -27,4 +27,12 @@ install(DIRECTORY
 # Install Python modules
 ament_python_install_package(${PROJECT_NAME})
 
+if(BUILD_TESTING)
+  find_package(ament_cmake_pytest REQUIRED)
+
+  ament_add_pytest_test(test_flake8 test/test_flake8.py)
+  ament_add_pytest_test(test_pep257 test/test_pep257.py)
+  ament_add_pytest_test(test_copyright test/test_copyright.py)
+endif()
+
 ament_package()

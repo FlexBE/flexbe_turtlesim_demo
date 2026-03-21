@@ -32,9 +32,9 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from geometry_msgs.msg import Twist
-
 from flexbe_turtlesim_demo_flexbe_states.timed_cmd_vel_state import TimedCmdVelState
+
+from geometry_msgs.msg import Twist
 
 
 class _FakePublisher:

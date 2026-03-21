@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-# Copyright 2026 Christopher Newport University
+# Copyright 2015 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,4 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""FlexBE behavior definitions for the turtlesim demo."""
+"""Run pep257 tests."""
+
+from pathlib import Path
+
+from ament_pep257.main import main
+
+import pytest
+
+
+@pytest.mark.linter
+@pytest.mark.pep257
+def test_pep257():
+    """Run pep257 tests."""
+    test_dir = Path(__file__).resolve().parent
+    package_dir = test_dir.parent / 'flexbe_turtlesim_demo_flexbe_states'
+    ret = main(argv=[str(package_dir), str(test_dir), str(test_dir.parent / 'setup.py')])
+    assert ret == 0, 'Found code style errors / warnings'

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,13 +30,10 @@ Created on Thursday 30-June-2023
 """
 
 
-from flexbe_core import Autonomy
-from flexbe_core import Behavior
-from flexbe_core import ConcurrencyContainer
-from flexbe_core import Logger
-from flexbe_core import OperatableStateMachine
-from flexbe_core import PriorityContainer
+from flexbe_core import Autonomy, Behavior, ConcurrencyContainer, Logger, OperatableStateMachine, PriorityContainer
+
 from flexbe_states.log_state import LogState
+
 from flexbe_turtlesim_demo_flexbe_states.example_state import ExampleState as flexbe_turtlesim_demo_flexbe_states__ExampleState
 
 # Additional imports can be added inside the following tags
@@ -53,6 +50,7 @@ class Example2SM(Behavior):
     """
 
     def __init__(self, node):
+        """Initialize ROS resources and behavior parameters."""
         super().__init__()
         self.name = 'Example 2'
 
@@ -75,8 +73,9 @@ class Example2SM(Behavior):
         # Behavior comments:
 
     def create(self):
-        start_msg = "Demo started!"
-        done_msg = "Demo finished!"
+        """Build the behavior state machine."""
+        start_msg = 'Demo started!'
+        done_msg = 'Demo finished!'
         # x:823 y:238, x:836 y:155
         _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
 

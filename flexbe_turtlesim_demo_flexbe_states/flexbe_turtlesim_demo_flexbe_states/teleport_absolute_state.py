@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 """Teleport turtle FlexBE state."""
 
-from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
+
+from rclpy.duration import Duration
 
 try:
     # Kilted and newer
@@ -82,10 +83,12 @@ class TeleportAbsoluteState(EventState):
         self._srv = None
 
     def on_start(self):
+        """Create the shared teleport service proxy when the behavior starts."""
         # Set up the proxy now, but do not wait on the service just yet
         self._srv = ProxyServiceCaller({self._srv_topic: TeleportAbsolute}, wait_duration=0.0)
 
     def on_stop(self):
+        """Remove the shared teleport service proxy when the behavior stops."""
         # Remove the proxy client if no longer in use
         ProxyServiceCaller.remove_client(self._srv_topic)
         self._srv = None
@@ -111,18 +114,18 @@ class TeleportAbsoluteState(EventState):
                 if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._call_timeout.nanoseconds:
                     # Failed to return call in timely manner
                     self._return = 'call_timeout'
-                    Logger.logerr(f"{self._name}: Service {self._srv_topic} call timed out!")
+                    Logger.logerr(f'{self._name}: Service {self._srv_topic} call timed out!')
         else:
             # Waiting for service to become available in non-blocking manner
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
-                Logger.localinfo(f"{self._name}: Service {self._srv_topic} is now available - making service call!")
+                Logger.localinfo(f'{self._name}: Service {self._srv_topic} is now available - making service call!')
                 self._do_service_call()
                 # Process the result on next execute call (so some delay)
             else:
                 if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._wait_timeout.nanoseconds:
                     # Failed to return call in timely manner
                     self._return = 'unavailable'
-                    Logger.logerr(f"{self._name}: Service {self._srv_topic} is unavailable!")
+                    Logger.logerr(f'{self._name}: Service {self._srv_topic} is unavailable!')
 
         return self._return
 
@@ -138,14 +141,14 @@ class TeleportAbsoluteState(EventState):
 
         if 'pose' in userdata:
             if not isinstance(userdata.pose, (list, tuple)):
-                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
-                               "needs list of 2 or 3 numbers!")
+                Logger.logwarn(f'{self._name}: Invalid pose userdata {userdata.pose} - '
+                               'needs list of 2 or 3 numbers!')
                 self._return = 'failed'
                 return
 
             if len(userdata.pose) not in (2, 3):
-                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
-                               "needs list of 2 or 3 numbers!")
+                Logger.logwarn(f'{self._name}: Invalid pose userdata {userdata.pose} - '
+                               'needs list of 2 or 3 numbers!')
                 self._return = 'failed'
                 return
 
@@ -157,35 +160,35 @@ class TeleportAbsoluteState(EventState):
                     # setting angle is optional
                     self._srv_request.theta = float(userdata.pose[2])
 
-                Logger.localinfo(f"Using position = ({self._srv_request.x:.3f}, {self._srv_request.y:.3f}), "
-                                 f"angle={self._srv_request.theta:.3f} radians from userdata")
+                Logger.localinfo(f'Using position = ({self._srv_request.x:.3f}, {self._srv_request.y:.3f}), '
+                                 f'angle={self._srv_request.theta:.3f} radians from userdata')
 
-            except Exception as exc:  # pylint: disable=W0703
-                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
-                               f"needs list of 2 or 3 numbers!\n  {type(exc)} - {exc}")
+            except (TypeError, ValueError) as exc:
+                Logger.logwarn(f'{self._name}: Invalid pose userdata {userdata.pose} - '
+                               f'needs list of 2 or 3 numbers!\n  {type(exc)} - {exc}')
                 self._return = 'failed'
                 return
         else:
-            Logger.localinfo(f"Using position = ({self._srv_request.x:.3f}, {self._srv_request.y:.3f}), "
-                             f"angle={self._srv_request.theta:.3f} radians")
+            Logger.localinfo(f'Using position = ({self._srv_request.x:.3f}, {self._srv_request.y:.3f}), '
+                             f'angle={self._srv_request.theta:.3f} radians')
 
         self._start_time = self._node.get_clock().now()
         try:
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
                 self._do_service_call()
             else:
-                Logger.logwarn(f"{self._name}: Service {self._srv_topic} is not yet available ...")
-        except Exception as exc:  # pylint: disable=W0703
-            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
+                Logger.logwarn(f'{self._name}: Service {self._srv_topic} is not yet available ...')
+        except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            Logger.logerr(f'{self._name}: Service {self._srv_topic} exception {type(exc)} - {exc}')
             self._return = 'failed'
 
     def _do_service_call(self):
         """Make the service call using async non-blocking."""
         try:
-            Logger.localinfo(f"{self._name}: Calling service {self._srv_topic} ...")
+            Logger.localinfo(f'{self._name}: Calling service {self._srv_topic} ...')
             self._srv_result = self._srv.call_async(self._srv_topic, self._srv_request, wait_duration=0.0)
             self._start_time = self._node.get_clock().now()  # Reset timer for call timeout
             self._service_called = True
-        except Exception as exc:
-            Logger.logerr(f"{self._name}: Service {self._srv_topic} exception {type(exc)} - {str(exc)}")
+        except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            Logger.logerr(f'{self._name}: Service {self._srv_topic} exception {type(exc)} - {exc}')
             raise exc

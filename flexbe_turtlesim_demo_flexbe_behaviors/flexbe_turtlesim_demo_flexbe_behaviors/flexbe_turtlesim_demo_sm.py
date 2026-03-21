@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2023 David Conner
+# Copyright 2026 David Conner
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,16 +30,14 @@ Created on July 2023
 """
 
 
-from flexbe_core import Autonomy
-from flexbe_core import Behavior
-from flexbe_core import ConcurrencyContainer
-from flexbe_core import Logger
-from flexbe_core import OperatableStateMachine
-from flexbe_core import PriorityContainer
+from flexbe_core import Autonomy, Behavior, ConcurrencyContainer, Logger, OperatableStateMachine, PriorityContainer
+
 from flexbe_states.input_state import InputState
 from flexbe_states.log_state import LogState
 from flexbe_states.operator_decision_state import OperatorDecisionState
+
 from flexbe_turtlesim_demo_flexbe_behaviors.turtlesim_input_state_behavior_sm import TurtlesimInputStateBehaviorSM
+
 from flexbe_turtlesim_demo_flexbe_states.clear_turtlesim_state import ClearTurtlesimState
 from flexbe_turtlesim_demo_flexbe_states.teleport_absolute_state import TeleportAbsoluteState
 from flexbe_turtlesim_demo_flexbe_states.timed_cmd_vel_state import TimedCmdVelState
@@ -62,6 +60,7 @@ class FlexBETurtlesimDemoSM(Behavior):
     """
 
     def __init__(self, node):
+        """Initialize ROS resources and nested behaviors for the demo."""
         super().__init__()
         self.name = 'FlexBE Turtlesim Demo'
 
@@ -88,6 +87,7 @@ class FlexBETurtlesimDemoSM(Behavior):
         # Behavior comments:
 
     def create(self):
+        """Build the top-level turtlesim demo state machine."""
         cmd_vel = '/turtle1/cmd_vel'
         # x:1086 y:238
         _state_machine = OperatableStateMachine(outcomes=['finished'])
@@ -103,7 +103,7 @@ class FlexBETurtlesimDemoSM(Behavior):
         with _sm_goto_0:
             # x:41 y:116
             OperatableStateMachine.add('GetPose',
-                                       InputState(request=3, message="Input pose (x, y, radians)", timeout=1.0),
+                                       InputState(request=3, message='Input pose (x, y, radians)', timeout=1.0),
                                        transitions={'received': 'GoToPose', 'aborted': 'GoToFail',
                                                     'no_connection': 'GoToFail', 'data_error': 'GoToFail'},
                                        autonomy={'received': Autonomy.Off, 'aborted': Autonomy.Off,
@@ -112,7 +112,7 @@ class FlexBETurtlesimDemoSM(Behavior):
 
             # x:585 y:258
             OperatableStateMachine.add('GoToFail',
-                                       LogState(text="Failed to go to pose", severity=Logger.REPORT_WARN),
+                                       LogState(text='Failed to go to pose', severity=Logger.REPORT_WARN),
                                        transitions={'done': 'failed'},
                                        autonomy={'done': Autonomy.Off})
 
@@ -175,13 +175,13 @@ class FlexBETurtlesimDemoSM(Behavior):
 
             # x:911 y:133
             OperatableStateMachine.add('ClearFailed',
-                                       LogState(text="Failed to clear Turtlesim window!", severity=Logger.REPORT_HINT),
+                                       LogState(text='Failed to clear Turtlesim window!', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:694 y:20
             OperatableStateMachine.add('ClearLog',
-                                       LogState(text="Clear turtlesim window ...", severity=Logger.REPORT_HINT),
+                                       LogState(text='Clear turtlesim window ...', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'ClearWindow'},
                                        autonomy={'done': Autonomy.Off})
 
@@ -199,19 +199,19 @@ class FlexBETurtlesimDemoSM(Behavior):
 
             # x:297 y:419
             OperatableStateMachine.add('FailedEight',
-                                       LogState(text="Failed Eight pattern", severity=Logger.REPORT_HINT),
+                                       LogState(text='Failed Eight pattern', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:550 y:287
             OperatableStateMachine.add('Finished Eight-pattern',
-                                       LogState(text="Finished 8 pattern", severity=Logger.REPORT_HINT),
+                                       LogState(text='Finished 8 pattern', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:459 y:4
             OperatableStateMachine.add('GoHome',
-                                       LogState(text="Go to home position", severity=Logger.REPORT_HINT),
+                                       LogState(text='Go to home position', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Home'},
                                        autonomy={'done': Autonomy.Off})
 
@@ -234,8 +234,8 @@ class FlexBETurtlesimDemoSM(Behavior):
 
             # x:651 y:133
             OperatableStateMachine.add('Operator',
-                                       OperatorDecisionState(outcomes=["Home", "Eight", "Quit", "Clear", "Rotate", "Pose"],
-                                                             hint="Suggest 'Eight' for pattern move", suggestion="Eight"),
+                                       OperatorDecisionState(outcomes=['Home', 'Eight', 'Quit', 'Clear', 'Rotate', 'Pose'],
+                                                             hint="Suggest 'Eight' for pattern move", suggestion='Eight'),
                                        transitions={'Home': 'GoHome', 'Eight': 'EightMove', 'Quit': 'finished',
                                                     'Clear': 'ClearLog', 'Rotate': 'Turtlesim Input State Behavior',
                                                     'Pose': 'GoTo'},
@@ -244,25 +244,25 @@ class FlexBETurtlesimDemoSM(Behavior):
 
             # x:934 y:534
             OperatableStateMachine.add('PoseDone',
-                                       LogState(text="Updated pose", severity=Logger.REPORT_HINT),
+                                       LogState(text='Updated pose', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:967 y:330
             OperatableStateMachine.add('RotateFailed',
-                                       LogState(text="Rotate failed", severity=Logger.REPORT_HINT),
+                                       LogState(text='Rotate failed', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:1072 y:281
             OperatableStateMachine.add('RotateLog',
-                                       LogState(text="Rotation complete", severity=Logger.REPORT_HINT),
+                                       LogState(text='Rotation complete', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:417 y:159
             OperatableStateMachine.add('ServiceCallFailed',
-                                       LogState(text="Failed during TeleportAbsolute service for turtlesim",
+                                       LogState(text='Failed during TeleportAbsolute service for turtlesim',
                                                 severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
@@ -282,13 +282,13 @@ class FlexBETurtlesimDemoSM(Behavior):
 
             # x:345 y:299
             OperatableStateMachine.add('Unavailable',
-                                       LogState(text="Service is unavailable - Start turtlesim?", severity=Logger.REPORT_HINT),
+                                       LogState(text='Service is unavailable - Start turtlesim?', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
 
             # x:461 y:80
             OperatableStateMachine.add('AtHome',
-                                       LogState(text="Turtle is home!", severity=Logger.REPORT_HINT),
+                                       LogState(text='Turtle is home!', severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Operator'},
                                        autonomy={'done': Autonomy.Off})
 

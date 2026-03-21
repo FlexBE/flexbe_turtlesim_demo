@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2023 Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 """Publish command velocity FlexBE state."""
 
-from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyPublisher
 
 from geometry_msgs.msg import Twist
+
+from rclpy.duration import Duration
 
 # Based on flexible_navigation : flex_nav_flexbe_states: TimedTwistState
 # but removes TwistStamped handling
@@ -94,7 +95,7 @@ class TimedCmdVelState(EventState):
 
         # Normal operation
         if self._cmd_topic:
-            Logger.localinfo(f"{self._name} : {self._twist}")  # For initial debugging
+            Logger.localinfo(f'{self._name} : {self._twist}')  # For initial debugging
             self._pub.publish(self._cmd_topic, self._twist)
 
         return None
