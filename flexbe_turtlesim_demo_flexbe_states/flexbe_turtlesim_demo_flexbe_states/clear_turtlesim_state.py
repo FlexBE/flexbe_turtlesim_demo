@@ -28,9 +28,10 @@ class ClearTurtlesimState(EventState):
     This state clears the Turtlesim window using the /clear service.
 
     This approach using the blocking call on enter.
-    This is generally NOT advised if there are any potential concurrent operations.
+    This is generally NOT advised if there are any potential
+    concurrent operations.
 
-    -- service_name   string    Service name (default: `/clear`)
+    -- service_name  string     Service name (default: `/clear`)
     -- wait_timeout  float      Duration to wait for service to become available (default: 3.0 seconds)
     <= done             Service call returned result as expected
     <= failed           Service failed to return result

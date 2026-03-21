@@ -30,6 +30,7 @@
 
 import unittest
 from types import SimpleNamespace
+from unittest.mock import patch
 
 from geometry_msgs.msg import Twist
 
@@ -45,6 +46,30 @@ class _FakePublisher:
         self.messages.append((topic, msg))
 
 
+class _FakeTime:
+
+    def __init__(self, nanoseconds):
+        self.nanoseconds = nanoseconds
+
+
+class _FakeClock:
+
+    def __init__(self):
+        self._now = _FakeTime(0)
+
+    def now(self):
+        return self._now
+
+
+class _FakeNode:
+
+    def __init__(self):
+        self._clock = _FakeClock()
+
+    def get_clock(self):
+        return self._clock
+
+
 class TestTimedCmdVelStateCleanup(unittest.TestCase):
     """Ensure open-loop velocity commands are cleared on interruption paths."""
 
@@ -53,7 +78,14 @@ class TestTimedCmdVelStateCleanup(unittest.TestCase):
         state._cmd_topic = '/turtle1/cmd_vel'
         state._pub = _FakePublisher()
         state._stop_twist = Twist()
+        state._twist = Twist()
+        state._node = _FakeNode()
+        state._target_time = type('TargetTime', (), {'nanoseconds': int(1e9)})()
+        state._start_time = None
+        state._pause_time = None
+        state._paused_duration_ns = 0
         state._return = None
+        state._name = 'TimedCmdVelState'
         return state
 
     def test_on_pause_and_on_stop_publish_zero_twist(self):
@@ -88,6 +120,27 @@ class TestTimedCmdVelStateCleanup(unittest.TestCase):
         completed_state.on_exit(SimpleNamespace())
 
         self.assertEqual([], completed_state._pub.messages)
+
+    @patch('flexbe_turtlesim_demo_flexbe_states.timed_cmd_vel_state.Logger.localinfo')
+    def test_on_resume_excludes_paused_time_from_completion(self, _localinfo):
+        """A long pause should not cause the state to complete immediately on resume."""
+        state = self._make_state()
+        clock = state._node.get_clock()
+
+        clock._now = _FakeTime(0)
+        state.on_enter(SimpleNamespace())
+
+        clock._now = _FakeTime(400_000_000)
+        state.on_pause()
+
+        clock._now = _FakeTime(2_400_000_000)
+        state.on_resume(SimpleNamespace())
+
+        clock._now = _FakeTime(2_500_000_000)
+        self.assertIsNone(state.execute(SimpleNamespace()))
+
+        clock._now = _FakeTime(3_100_000_000)
+        self.assertEqual('done', state.execute(SimpleNamespace()))
 
 
 if __name__ == '__main__':

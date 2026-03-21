@@ -54,6 +54,8 @@ class TimedCmdVelState(EventState):
         # The constructor is called when building the state machine, not when actually starting the behavior.
         # Thus, we cannot save the starting time now and will do so later.
         self._start_time = None
+        self._pause_time = None
+        self._paused_duration_ns = 0
 
         self._return = None  # Track the outcome so we can detect if transition is blocked
 
@@ -81,7 +83,8 @@ class TimedCmdVelState(EventState):
             self._publish_stop()
             return self._return
 
-        if self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds > self._target_time.nanoseconds:
+        elapsed_ns = self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds - self._paused_duration_ns
+        if elapsed_ns > self._target_time.nanoseconds:
             # Normal completion, do not bother repeating the publish
             # We won't bother publishing a 0 command unless blocked (above)
             # so that we can chain multiple motions together
@@ -103,11 +106,20 @@ class TimedCmdVelState(EventState):
         i.e. a transition from another state to this one is taken.
         """
         self._start_time = self._node.get_clock().now()
+        self._pause_time = None
+        self._paused_duration_ns = 0
         self._return = None  # reset the completion flag
 
     def on_pause(self):
         """Stop motion while the behavior is paused with this state active."""
+        self._pause_time = self._node.get_clock().now()
         self._publish_stop()
+
+    def on_resume(self, userdata):
+        """Exclude paused time from the active motion duration."""
+        if self._pause_time is not None:
+            self._paused_duration_ns += self._node.get_clock().now().nanoseconds - self._pause_time.nanoseconds
+            self._pause_time = None
 
     def on_exit(self, userdata):
         """Stop motion if this state is interrupted before its normal completion."""
