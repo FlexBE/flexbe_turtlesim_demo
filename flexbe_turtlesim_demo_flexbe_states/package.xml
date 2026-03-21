@@ -12,28 +12,27 @@
     <maintainer email="robotics@cnu.edu">David Conner</maintainer>
     <license>BSD</license>
 
-    <exec_depend>rclcpp</exec_depend>
-    <exec_depend>rclpy</exec_depend>
-    <exec_depend>flexbe_core</exec_depend>
-
-    <test_depend>ament_copyright</test_depend>
-    <test_depend>ament_flake8</test_depend>
-    <test_depend>ament_pep257</test_depend>
-    <test_depend>python3-pytest</test_depend>
-
     <buildtool_depend>ament_cmake</buildtool_depend>
     <buildtool_depend>ament_cmake_python</buildtool_depend>
 
-    <exec_depend>flexbe_webui</exec_depend>
+    <exec_depend>action_msgs</exec_depend>
     <exec_depend>flexbe_behavior_engine</exec_depend>
-    <exec_depend>rclpy</exec_depend>
     <exec_depend>flexbe_testing</exec_depend>
+    <exec_depend>flexbe_webui</exec_depend>
+    <exec_depend>geometry_msgs</exec_depend>
+    <exec_depend>rclcpp</exec_depend>
+    <exec_depend>rclpy</exec_depend>
+    <exec_depend>std_srvs</exec_depend>
+
+    <exec_depend>turtlesim</exec_depend>
+    <!-- turtlesim provides actions/services in older ROS distributions;
+         turtlesim_msgs in newer distributions -->
+    <!-- <exec_depend>turtlesim_msgs</exec_depend>  -->
 
     <test_depend>ament_copyright</test_depend>
     <test_depend>ament_flake8</test_depend>
     <test_depend>ament_pep257</test_depend>
     <test_depend>python3-pytest</test_depend>
-    <test_depend>geometry_msgs</test_depend>
 
     <export>
         <build_type>ament_python</build_type>
