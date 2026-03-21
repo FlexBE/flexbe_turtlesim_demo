@@ -29,6 +29,7 @@
 
 """Pytest testing for flexbe_turtlesim_demo_flexbe_states."""
 
+from pathlib import Path
 
 from flexbe_testing.py_tester import PyTester
 
@@ -48,31 +49,25 @@ class TestFlexBETurtleSimDemoStates(PyTester):
 
         PyTester.setUpClass()  # Do this last after setting package and tests folder
 
-    # The tests
-    def test_clear_turtlesim_state(self):
-        """Run FlexBE unit test given .test file."""
-        self.run_test("clear_turtlesim_state", timeout_sec=2.0, max_cnt=5000)
 
-    def test_example_state(self):
-        """Run FlexBE unit test given .test file."""
-        self.run_test("example_state")
+_TEST_TIMEOUTS = {
+    'clear_turtlesim_state': {'timeout_sec': 2.0, 'max_cnt': 5000},
+    'rotate_turtle_state': {'timeout_sec': 2.0, 'max_cnt': 5000},
+    'teleport_absolute_state': {'timeout_sec': 2.0, 'max_cnt': 5000},
+    'timed_cmd_vel_state': {'timeout_sec': 2.0, 'max_cnt': 5000},
+}
 
-    def test_rotate_turtle_state(self):
-        """
-        Run FlexBE unit test given .test file.
 
-        This test requires longer wait than normal
-        """
-        self.run_test("rotate_turtle_state", timeout_sec=2.0, max_cnt=5000)
+def _make_flexbe_test(test_name):
+    """Create a pytest/unittest-compatible test method for a single FlexBE .test file."""
 
-    def test_teleport_absolute_state(self):
-        """
-        Run FlexBE unit test given .test file.
+    def _test(self):
+        self.run_test(test_name, **_TEST_TIMEOUTS.get(test_name, {}))
 
-        This test requires longer wait than normal
-        """
-        self.run_test("teleport_absolute_state", timeout_sec=2.0, max_cnt=5000)
+    _test.__name__ = f'test_{test_name}'
+    _test.__doc__ = f"Run FlexBE unit test from '{test_name}.test'."
+    return _test
 
-    def test_timed_cmd_vel_state(self):
-        """Run FlexBE unit test given .test file."""
-        self.run_test("timed_cmd_vel_state", timeout_sec=2.0, max_cnt=5000)
+
+for _test_file in sorted(Path(__file__).resolve().parent.glob('*.test')):
+    setattr(TestFlexBETurtleSimDemoStates, f'test_{_test_file.stem}', _make_flexbe_test(_test_file.stem))

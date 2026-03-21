@@ -28,6 +28,7 @@
 
 """flexbe_turtlesim_demo_flexbe_states testing."""
 
+from pathlib import Path
 from os.path import join
 
 from launch import LaunchDescription
@@ -43,13 +44,9 @@ def generate_launch_description():
     flexbe_states_test_dir = get_package_share_directory('flexbe_turtlesim_demo_flexbe_states')
 
     path = join(flexbe_states_test_dir, "tests")
-
-    testcases = ""
-    testcases += join(path, "clear_turtlesim_state.test") + "\n"
-    testcases += join(path, "example_state.test") + "\n"
-    testcases += join(path, "rotate_turtle_state.test") + "\n"
-    testcases += join(path, "teleport_absolute_state.test") + "\n"
-    testcases += join(path, "timed_cmd_vel_state.test") + "\n"
+    testcases = "\n".join(str(test_file) for test_file in sorted(Path(path).glob('*.test')))
+    if testcases:
+        testcases += "\n"
 
     return LaunchDescription([
         DeclareLaunchArgument("pkg", default_value="flexbe_turtlesim_demo_flexbe_states"),
