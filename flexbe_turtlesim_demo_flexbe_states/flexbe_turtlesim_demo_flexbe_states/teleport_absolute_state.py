@@ -132,7 +132,23 @@ class TeleportAbsoluteState(EventState):
 
         i.e. a transition from another state to this one is taken.
         """
-        if 'pose' in userdata and isinstance(userdata.pose, (list, tuple)):
+        self._return = None  # reset the completion flag
+        self._service_called = False
+        self._start_time = None
+
+        if 'pose' in userdata:
+            if not isinstance(userdata.pose, (list, tuple)):
+                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
+                               "needs list of 2 or 3 numbers!")
+                self._return = 'failed'
+                return
+
+            if len(userdata.pose) not in (2, 3):
+                Logger.logwarn(f"{self._name}: Invalid pose userdata {userdata.pose} - "
+                               "needs list of 2 or 3 numbers!")
+                self._return = 'failed'
+                return
+
             try:
                 self._srv_request.x = float(userdata.pose[0])
                 self._srv_request.y = float(userdata.pose[1])
@@ -154,8 +170,6 @@ class TeleportAbsoluteState(EventState):
                              f"angle={self._srv_request.theta:.3f} radians")
 
         self._start_time = self._node.get_clock().now()
-        self._return = None  # reset the completion flag
-        self._service_called = False
         try:
             if self._srv.is_available(self._srv_topic, wait_duration=0.0):
                 self._do_service_call()
