@@ -3,7 +3,7 @@
 The first behavior, `Example 1`, constructs a simple state machine
 using two states provided with the FlexBE Behavior Engine.
 
-Start the FlexBE onboard and OCS as described [here](flexbe_webui_startup.md) for the FlexBE WebUI or the [flexbe_app](flexbe_app_startup.md). The basic directions are the same afterwards.
+Start the FlexBE onboard and OCS as described in [Detailed Startup Options](quickstart_details.md).
 
 Load the `Example 1` behavior from the FlexBE UI dashboard as shown in the leftmost image below.  Once loaded,
 the "Behavior Dashboard" shows the behavior configuration information as shown in the center image below.

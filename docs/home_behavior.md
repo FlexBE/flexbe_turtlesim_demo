@@ -144,10 +144,10 @@ When the "Home" state becomes active the `on_enter` method of `TeleportAbsoluteS
 If the system is using `userdata` the desired pose is extracted.  For our case, we have remapped the name `pose` to the `home` userdata defined on the behavior dashboard.  Again, for a more indepth discussion of `userdata` see the ["Rotate"](rotate_behavior.md) discussion.
 
 If this user data is not provided, then the state defaults to using the parameters defined in the by the creation
-in `flexbe_turtlebot_demo_sm` code above.
+in `flexbe_turtlesim_demo_sm` code above.
 
-The state instance makes note of the `self._start_time`, and if available the service call is invoked using an asychronous (non-blocking)
-service call (constrast with ["Clear"](clear_behavior.md) discussion ).
+The state instance makes note of the `self._start_time`, and if available the service call is invoked using an asynchronous (non-blocking)
+service call (contrast with ["Clear"](clear_behavior.md) discussion).
 If an exception occurs, the state `self._return` is marked as `failed`.
 
 
@@ -267,4 +267,4 @@ was not available `on_enter`, we call when it becomes available up until the des
 This example has demonstrated using an asynchronous service call within FlexBE.
 For comparison with a blocking service call, see the ["Clear"](clear_behavior.md) discussion.
 
-[Back to the overview](../README.md#selectable-transitions)
+[Back to the overview](quickstart_details.md#selectable-transitions)

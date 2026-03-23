@@ -93,4 +93,4 @@ See ["Rotate"](rotate_behavior.md) and ["Home"](home_behavior.md) discussions fo
 ["Eight"](eight_loop.md) for more discussion of the `StateMachine` container.
 
 
-[Back to the overview](../README.md#selectable-transitions)
+[Back to the overview](quickstart_details.md#selectable-transitions)

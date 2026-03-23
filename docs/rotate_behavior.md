@@ -5,7 +5,7 @@ Two key parts of FlexBE that extends the concept beyond pure state machines are:
 * 1) composition of behaviors into HFSM
 * 2) `userdata` that can be passed from one state to another.
 
-For example, the [`RotateTurtleState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/rotate_turtle_state.py) uses
+For example, the [`RotateTurtleState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/rotate_turtle_state.py) uses
 `userdata` to define the desired angle.
 
 We will begin our discussion with a simpler example behavior and then return to the specifics of the "Rotate" transition in `FlexBE Turtlesim Demonstration`.
@@ -97,7 +97,7 @@ class RotateTurtleState(EventState):
 ```
 
 Internally, the state implementation will use `userdata.angle` to access the stored data
-using the FlexBE core [`userdata.py` class](https://github.com/flexbe/flexbe_behavior_engine/flexbe_core/flexbe_core/userdata.py) that
+using the FlexBE core [`userdata.py` class](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/userdata.py) that
 extends the capabilities of the basic `dict` object.
 
 In the `Turtlesim Rotation State Behavior` behavior, we define
@@ -302,4 +302,4 @@ If the state exits before the goal (e.g. if operator requests preemption), then 
 This example discussed the use of `InputState` to provide operator data to the onboard behavior in collaborative autonomy, the use of behavior composition to define more complex behaviors, and the use of ROS 2 `action` interfaces as the main approach to interacting with
 more computationally intensive external nodes.
 
-[Back to the overview](../README.md#selectable-transitions)
+[Back to the overview](quickstart_details.md#selectable-transitions)

@@ -14,12 +14,12 @@ Here we demonstrate adding a new `State machine` container type to the existing 
 
 In the given `FlexBE Turtlesim Demo` behavior we added the container, then edited its name to be "EightMove" instead of "Container".
 
-Inside the "EightMove" container, shown in the rightmost image above, we have defined a simple state machine that is just a sequence of 
-[`TimeCmdVelState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/timed_cmd_vel_state.py) instances.
+Inside the "EightMove" container, shown in the rightmost image above, we have defined a simple state machine that is just a sequence of
+[`TimeCmdVelState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/timed_cmd_vel_state.py) instances.
 
 
 ```python
-rom rclpy.duration import Duration
+from rclpy.duration import Duration
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyPublisher
 
@@ -137,12 +137,12 @@ the active state from the point of view of the top-level (or "root") state machi
 > Note: A "failed" outcome for "EightMove" was initially defined, but was never connected internally.
 > Regardless, since it was defined, it must be connected at the root level.  This allows for future modification.
 > FlexBE requires all possible state outcomes to be terminated, even if they are never exercised.
-> Alternatetively, the "failed" outcome could be deleted in the editor view of "EightMove" by clicking the box with red line to right of outcome label.
+> Alternatively, the "failed" outcome could be deleted in the editor view of "EightMove" by clicking the box with red line to right of outcome label.
 
 
 ----
 
 This example has demonstrated construction of an HFSM using a state machine container.
 
-[Back to the overview](../README.md#selectable-transitions)
+[Back to the overview](quickstart_details.md#selectable-transitions)
 

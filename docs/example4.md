@@ -1,10 +1,10 @@
 # Example 4 - Behavior composition - Using behaviors in other behaviors
 
-The `Example 4` behavior constructs a three-layer HFSM with the `Example 3` behavior inside a `Behavior` container that contains multiple [`ConcurrencyContainer`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/core/concurrency_container.py) states each with multiple `ExampleState`
+The `Example 4` behavior constructs a three-layer HFSM with the `Example 3` behavior inside a `Behavior` container that contains multiple [`ConcurrencyContainer`](https://github.com/FlexBE/flexbe_behavior_engine/blob/ros2-devel/flexbe_core/flexbe_core/core/concurrency_container.py) states each with multiple `ExampleState` instances.
 
 
 You may load the existing `Example 4` and run after starting the FlexBE system as
-described in [flexbe_webui](flexbe_webui_startup.md) or for the older (and deprecated in Jazzy) [flexbe_app](flexbe_app_startup.md).
+described in [Detailed Startup Options](quickstart_details.md).
 
 Or create a new behavior and build from scratch following these directions.
 

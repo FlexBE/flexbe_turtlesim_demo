@@ -12,7 +12,7 @@ The "Clear" transition first invokes the "ClearLog" [LogState](https://github.co
 "ClearWindow" state instance of the [`ClearTurtlesimState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/clear_turtlesim_state.py).  After the `ClearTurtlesimState` returns, the system either transitions back to the "Operator" decision state, or
 into the "ClearFailed" `LogState` to notify the operator of problems.
 
-The key difference between `ClearTurtlesimState` and the [`TeleportAbosoluteState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/teleport_absolute_state.py) discussed in "Home" is that `ClearTurtlesimState` uses a *blocking* service call.
+The key difference between `ClearTurtlesimState` and the [`TeleportAbsoluteState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/teleport_absolute_state.py) discussed in "Home" is that `ClearTurtlesimState` uses a *blocking* service call.
 
 
 ```python
@@ -61,5 +61,5 @@ Just beware that this impacts the timing of all other states as the state machin
 This example has demonstrated using an blocking synchronous service call within FlexBE.
 For comparison with a non-blocking asynchronous service call, see the ["Home"](home_behavior.md) discussion.
 
-[Back to the overview](../README.md#selectable-transitions)
+[Back to the overview](quickstart_details.md#selectable-transitions)
 

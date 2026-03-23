@@ -4,7 +4,7 @@ The `Example 2` behavior constructs a simple state machine
 using three states.
 
 After starting the FlexBE system, including both the FlexBE onboard and OCS, as
-described [here](flexbe_webui_startup.md) for the FlexBE WebUI or for the older (and deprecated in Jazzy) [flexbe_app](flexbe_app_startup.md).
+described in [Detailed Startup Options](quickstart_details.md).
 
 Load the `Example 2` behavior from the FlexBE UI dashboard.  The leftmost image below shows the
 configuration dashboard after loading, and the center image shows the state machine with the
@@ -32,7 +32,7 @@ that the package `export`s `<flexbe_states />`.
 </export>
 ```
 
-Our [`ExampleState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) specifies one parameter (`target_time`) and two outputs (`'done'` and `'failed'`).
+Our [`ExampleState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) specifies one parameter (`target_time`) and two outputs (`'done'` and `'failed'`).
 This example does NOT use `userdata`.
 
 ```
@@ -86,7 +86,7 @@ Only an `execute` function is required to be overridden so that
 the state can return a value an terminate the state operation.
 The other methods can be overridden, or left as their default `pass` values from `EventState`.  At some point, the `enter` method should return a value other than `None` otherwise the state executes forever.
 
-The [`ExampleState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) overrides all of the methods, and adds logging to each transition to show how the the system executes each method during the state lifecycle.
+The [`ExampleState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) overrides all of the methods, and adds logging to each transition to show how the system executes each method during the state lifecycle.
 
 ```python
 def on_enter(self, userdata):
@@ -167,11 +167,11 @@ A few key points:
       * Offload longer running processes, such as planning, to separate nodes and interface using regular `topics` and `actions`
   * Again, to emphasize, these state implementation methods should *NOT* be long `blocking` calls to retain responsiveness.
 
-> Note: While blocking calls are possible, prefer to use non-blocking calls such as `actions` or asychronous service calls.
+> Note: While blocking calls are possible, prefer to use non-blocking calls such as `actions` or asynchronous service calls.
 See the TurtleSim demo discussions for ["Home"](home_behavior.md), ["Clear"](clear_behavior.md), and ["Rotate"](rotate_behavior.md)
 for more information about `action` and `service` handling.
 
-The [`ExampleState`](flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) `execute` function monitors the time since `on_enter`, and returns `done` when the *approximate* time has elapsed based on the designated update rate.
+The [`ExampleState`](../flexbe_turtlesim_demo_flexbe_states/flexbe_turtlesim_demo_flexbe_states/example_state.py) `execute` function monitors the time since `on_enter`, and returns `done` when the *approximate* time has elapsed based on the designated update rate.
 
 ```python
 def execute(self, userdata):
@@ -218,7 +218,7 @@ If the transition is blocked, the state continues to call `execute`.
 So, the state designer can choose to re-do the execute, or just return
 the previous value depending on the specific implementation
  design.  This flexibility is left to the state developer.
-But, be aware that the the `execute` is called if a transition is blocked.
+But, be aware that the `execute` is called if a transition is blocked.
 We will guide you through this later in the example demonstration.
 * This example includes a significant amount of logging to console; this is
 atypical, especially in an execute block, as it slows the system down due to the computational cost of I/O.
@@ -246,6 +246,6 @@ Also try to force early transitions by clicking on the transition label oval.  T
 > These changes are not visible in the source folder, and will be lost if the package is rebuilt.
 > To save any changes, the updated behavior Python and xml manifest files must be copied to the source folder.
 
-After experimenting with `Example 2`, continue on to [Example 3](example3.md) for a look at our first Hierarchical Finite State Machine (HFSM) using a `ConcurrencyContainter` that executes states in "parallel".
+After experimenting with `Example 2`, continue on to [Example 3](example3.md) for a look at our first Hierarchical Finite State Machine (HFSM) using a `ConcurrencyContainer` that executes states in "parallel".
 
 [Back to the overview](examples.md)
