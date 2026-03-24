@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2026 Christopher Newport University
 #
@@ -33,7 +33,7 @@ class ExampleState(EventState):
 
     The state also records the time the behavior was activated and exited.
 
-    The UI parses this description for data about the state to diplay.
+    The UI parses this description for data about the state to display.
 
     List parameter values with double hyphens
     -- target_time     float     Time which needs to have passed since the behavior started.
@@ -42,7 +42,7 @@ class ExampleState(EventState):
     <= done            Given time has passed.
     <= failed          Example for a failure outcome.
 
-    List input and output user data that is passes along using
+    List input and output user data that is passed along using
         These are optional and not included in this example.
     """
 
@@ -171,7 +171,7 @@ class ExampleState(EventState):
         """
         self._state_start_time = ExampleState._node.get_clock().now()
         Logger.loginfo(f"on_start for '{self._name}' state ({self.path}) @ {self.start_time} seconds "
-                       f' time to wait = {self.target_seconds} seconds..')
+                       f' time to wait = {self.target_seconds} seconds.')
 
     def on_stop(self):
         """

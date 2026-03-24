@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2026 Christopher Newport University
 #
@@ -28,9 +28,10 @@ class ClearTurtlesimState(EventState):
     """
     This state clears the Turtlesim window using the /clear service.
 
-    This approach using the blocking call on enter.
-    This is generally NOT advised if there are any potential
-    concurrent operations.
+    If the service is available on enter, a synchronous blocking call is made immediately.
+    If not yet available, the state polls non-blocking in execute() until the service
+    appears or wait_timeout expires. The blocking-on-enter behavior is generally NOT
+    advised if there are potential concurrent operations.
 
     -- service_name  string     Service name (default: `/clear`)
     -- wait_timeout  float      Duration to wait for service to become available (default: 3.0 seconds)
@@ -59,7 +60,6 @@ class ClearTurtlesimState(EventState):
 
         self._srv_request = Empty.Request()
 
-        self._error = None
         self._srv = None
 
     def on_start(self):
@@ -78,7 +78,7 @@ class ClearTurtlesimState(EventState):
         # Execute this method periodically while the state is active.
         # If no outcome is returned, the state will stay active.
 
-        if self._return:
+        if self._return is not None:
             # We have completed the state, and therefore must be blocked by autonomy level
             # Logger.localinfo(f"{self._name}: returning existing value {self._return} .")
             return self._return
@@ -117,7 +117,7 @@ class ClearTurtlesimState(EventState):
 
         This example does NOT use any userdata passed from upstream states.
 
-        , i.e. a transition from another state to this one is taken.
+        i.e. a transition from another state to this one is taken.
         """
         self._start_time = self._node.get_clock().now()
         self._return = None  # reset the completion flag

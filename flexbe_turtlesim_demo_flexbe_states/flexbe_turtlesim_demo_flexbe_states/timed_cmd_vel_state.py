@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2026 Christopher Newport University
 #
@@ -78,13 +78,14 @@ class TimedCmdVelState(EventState):
 
         If no outcome is returned, the state will stay active.
         """
-        if self._return:
+        if self._return is not None:
             # We have completed the state, and therefore must be blocked by autonomy level
-            # Stop the robot, but and return the prior outcome
+            # Stop the robot and return the prior outcome
             self._publish_stop()
             return self._return
 
-        elapsed_ns = self._node.get_clock().now().nanoseconds - self._start_time.nanoseconds - self._paused_duration_ns
+        now_ns = self._node.get_clock().now().nanoseconds
+        elapsed_ns = now_ns - self._start_time.nanoseconds - self._paused_duration_ns
         if elapsed_ns > self._target_time.nanoseconds:
             # Normal completion, do not bother repeating the publish
             # We won't bother publishing a 0 command unless blocked (above)
@@ -95,7 +96,7 @@ class TimedCmdVelState(EventState):
 
         # Normal operation
         if self._cmd_topic:
-            Logger.localinfo(f'{self._name} : {self._twist}')  # For initial debugging
+            Logger.localinfo_throttle(0.5, f'{self._name} : {self._twist}')
             self._pub.publish(self._cmd_topic, self._twist)
 
         return None
@@ -128,8 +129,9 @@ class TimedCmdVelState(EventState):
             self._publish_stop()
 
     def on_stop(self):
-        """Stop motion whenever the behavior stops or is preempted."""
+        """Stop motion and remove publisher whenever the behavior stops or is preempted."""
         self._publish_stop()  # Note, this happens regardless of whether this state is active
+        ProxyPublisher.remove_publisher(self._cmd_topic)
 
     def _publish_stop(self):
         """Publish a zero twist when we need to stop an in-flight open-loop command."""

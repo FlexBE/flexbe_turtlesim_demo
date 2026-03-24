@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2026 Christopher Newport University
 #
@@ -52,14 +52,14 @@ class RotateTurtleState(EventState):
     -- action_topic        Name of action to invoke
 
     Outputs
-    <= rotation_complete   Only a few dishes have been cleaned.
+    <= rotation_complete   Rotation reached the target angle.
     <= failed              Failed for some reason.
     <= canceled            User canceled before completion.
     <= timeout             The action has timed out.
 
     User data
     ># angle     float     Desired rotational angle in (degrees) (Input)
-    #> duration  float     Amount time taken to complete rotation (seconds) (Output)
+    #> duration  float     Time taken to complete rotation (seconds) (Output)
 
     """
 
@@ -70,7 +70,6 @@ class RotateTurtleState(EventState):
                          output_keys=['duration'])
 
         self._timeout = Duration(seconds=timeout)
-        self._timeout_sec = timeout
         self._topic = action_topic
 
         # Create the action client when building the behavior.
@@ -142,7 +141,7 @@ class RotateTurtleState(EventState):
                 _ = self._client.get_result(self._topic)  # The delta result value is not useful here
                 status = self._client.get_status(self._topic)
                 if status == GoalStatus.STATUS_SUCCEEDED:
-                    userdata.duration = self._node.get_clock().now() - self._start_time
+                    userdata.duration = elapsed.nanoseconds / 1e9
                     Logger.loginfo('Rotation complete')
                     self._return = 'rotation_complete'
                     return self._return
@@ -151,7 +150,7 @@ class RotateTurtleState(EventState):
                 # Checking for timeout after we check for goal response
                 self._return = 'timeout'
                 Logger.logwarn('Timeout waiting for action response!')
-                return 'timeout'
+                return self._return
 
         # If the action has not yet finished, no outcome will be returned and the state stays active.
         return None

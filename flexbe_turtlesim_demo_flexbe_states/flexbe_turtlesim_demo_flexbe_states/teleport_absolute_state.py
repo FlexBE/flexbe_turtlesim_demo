@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2026 Christopher Newport University
 #
@@ -79,7 +79,6 @@ class TeleportAbsoluteState(EventState):
         self._srv_request.y = y
         self._srv_request.theta = theta
 
-        self._error = None
         self._srv = None
 
     def on_start(self):
@@ -99,7 +98,7 @@ class TeleportAbsoluteState(EventState):
 
         If no outcome is returned, the state will stay active.
         """
-        if self._return:
+        if self._return is not None:
             # We have completed the state, and therefore must be blocked by autonomy level
             return self._return
 
@@ -191,4 +190,4 @@ class TeleportAbsoluteState(EventState):
             self._service_called = True
         except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
             Logger.logerr(f'{self._name}: Service {self._srv_topic} exception {type(exc)} - {exc}')
-            raise exc
+            self._service_called = False
