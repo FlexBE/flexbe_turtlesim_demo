@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Example 5">
+
+    <executable package_path="flexbe_turtlesim_demo_flexbe_behaviors.example_5_sm" class="Example5SM" />
+    <tagstring>example, priority, container</tagstring>
+    <author>David Conner</author>
+    <date>Mon Mar 23 2026</date>
+    <description>
+        Demonstrates using a PriorityContainer inside a ConcurrencyContainer.
+
+        The PriorityContainer (Priority_Work) runs a two-step sequential initialization sequence
+        that blocks all sibling states from executing — including deferring their on_enter calls —
+        until the priority sequence completes.
+
+        Both Priority_Work and Normal_Work must complete (AND condition) before
+        the ConcurrencyContainer exits with 'finished'.
+    </description>
+
+
+    <!-- Contained Behaviors -->
+
+    <!-- Available Parameters -->
+    <params>
+
+        <param type="numeric" name="waiting_time_priority_a" default="1.0" label="Priority wait A" hint="Waiting time for the first priority initialization step (Init_A)">
+            <min value="0.1" />
+            <max value="30.0" />
+        </param>
+
+        <param type="numeric" name="waiting_time_priority_b" default="1.0" label="Priority wait B" hint="Waiting time for the second priority initialization step (Init_B)">
+            <min value="0.1" />
+            <max value="30.0" />
+        </param>
+
+        <param type="numeric" name="waiting_time_normal" default="5.0" label="Normal work wait" hint="Waiting time for Normal_Work, which begins only after the priority sequence completes">
+            <min value="0.1" />
+            <max value="30.0" />
+        </param>
+
+    </params>
+
+
+</behavior>
