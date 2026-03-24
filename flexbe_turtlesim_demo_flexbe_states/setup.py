@@ -25,7 +25,7 @@ PACKAGE_NAME = 'flexbe_turtlesim_demo_flexbe_states'
 
 setup(
     name=PACKAGE_NAME,
-    version='0.0.2',
+    version='0.0.3',
     packages=find_packages(),
     data_files=[
         ('share/ament_index/resource_index/packages',

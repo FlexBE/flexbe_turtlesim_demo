@@ -22,7 +22,7 @@ PACKAGE_NAME = 'flexbe_turtlesim_demo_flexbe_behaviors'
 
 setup(
     name=PACKAGE_NAME,
-    version='0.0.2',
+    version='0.0.3',
     packages=[PACKAGE_NAME],
     data_files=[
         ('share/ament_index/resource_index/packages',
