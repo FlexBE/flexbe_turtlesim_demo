@@ -4,13 +4,13 @@
     schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
     <name>flexbe_turtlesim_demo_flexbe_behaviors</name>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <description>
        flexbe_turtlesim_demo_flexbe_behaviors references all implemented behaviors to
        provide a simple demonstration of FlexBE using the ROS Turtlesim packages.
     </description>
     <maintainer email="robotics@cnu.edu">David Conner</maintainer>
-    <license>BSD</license>
+    <license>Apache-2.0</license>
 
     <exec_depend>rclcpp</exec_depend>
     <exec_depend>rclpy</exec_depend>

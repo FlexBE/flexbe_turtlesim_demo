@@ -9,8 +9,8 @@ described in [Detailed Startup Options](quickstart_details.md).
 Or create a new behavior and build from scratch following these directions.
 
 <p float="center">
-  <img src="../img/example4_editor.png" alt="Example 4 editor view." width="40%">
-  <img src="../img/example3_top_level_sm.png" alt="Example 3 top-level state machine." width="40%">
+  <img src="img/example4_editor.png" alt="Example 4 editor view." width="40%">
+  <img src="img/example3_top_level_sm.png" alt="Example 3 top-level state machine." width="40%">
 </p>
 
 Use the "Add Behavior" action shown circled in top of leftmost image; this will open the normal "Load Behavior" dialog.

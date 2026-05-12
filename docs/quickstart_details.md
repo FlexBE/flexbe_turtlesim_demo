@@ -14,17 +14,20 @@ Ensure that a `turtlesim` node is running and its graphic window is open; if not
 There are 3 approaches to launching the full FlexBE suite for operator supervised autonomy-based control.
 Use one (and only one) of the following approaches:
 
+> Note: TurtleSim does **not** publish a `/clock` topic, so `use_sim_time` must remain `False` (the default).
+> Do **not** pass `use_sim_time:=True` with any of these launch commands.
+
 ### 1) FlexBE Quickstart
 
-`ros2 launch flexbe_webui flexbe_full.launch.py use_sim_time:=False`
+`ros2 launch flexbe_webui flexbe_full.launch.py`
 
   This starts all of FlexBE including both the *OCS* and *Onboard* software in one terminal.
 
 ### 2) Launch the *OCS* and *Onboard* separately:
 
-`ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
+`ros2 launch flexbe_onboard behavior_onboard.launch.py`
 
-`ros2 launch flexbe_webui flexbe_ocs.launch.py use_sim_time:=False`
+`ros2 launch flexbe_webui flexbe_ocs.launch.py`
 
   The `flexbe_ocs.launch.py` launches several nodes, along with the `webui_client` user interface.
 
@@ -36,16 +39,16 @@ Use one (and only one) of the following approaches:
 
 #### *Onboard*
 
-`ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
+`ros2 launch flexbe_onboard behavior_onboard.launch.py`
   * This runs onboard and executes the HFSM behavior
 
 #### *OCS*
 
-`ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror" -p use_sim_time:=False`
+`ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror"`
   * This runs on OCS computer, listens to `'flexbe/mirror/outcome'` topic to follow the state-to-state transitions.
     This allows the OCS to "mirror" what is happening onboard the robot
 
-`ros2 run flexbe_widget be_launcher --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
+`ros2 run flexbe_widget be_launcher --ros-args --remap __node:="behavior_launcher"`
   * This node listens to the UI and sends behavior structures and start requests to onboard
   * This can also be used separately from UI to launch behavior either on start up or by sending requests
 
@@ -58,17 +61,15 @@ To run the UI, you may choose one (and only one) of either:
       * Browser-based user interface
   * Use `http://127.0.0.1:8000` in your browser window
 
-If you experience GPU/rendering issues with the Electron client, run `webui_node` in headless mode
+If you experience GPU/rendering issues with the UI client, run `webui_node` in headless mode
 and open the client separately:
 
 ```
-ros2 run flexbe_webui webui_node --ros-args -p headless:=True
-ros2 run flexbe_webui webui_client
+ros2 launch flexbe_webui flexbe_ocs.launch.py headless:=true
 ```
 
-You may also run `ros2 launch flexbe_webui flexbe_ocs.launch.py headless:=true use_sim_time:=False`
-to launch the `flexbe_mirror`, `be_launcher`, and `webui_node` at one time, and then
-run the UI separately (e.g. `ros2 run flexbe_webui webui_client`).  This is our standard mode of testing.
+to launch the `flexbe_mirror`, `be_launcher`, and `webui_node` at one time.
+Then run the UI client separately (e.g. `ros2 run flexbe_webui webui_client`).  This is our standard mode of testing.
 
 After starting the FlexBE system using one of these three approaches, the primary interaction is through the FlexBE UI, although
 you may monitor the terminals to see the confirming messages that are posted during operation.
@@ -115,9 +116,9 @@ Using the FlexBE UI application *Behavior Dashboard*, select *Load Behavior* fro
 select the `flexbe_turtlesim_demo_flexbe_behaviors` package from the dropdown menu and the `FlexBE Turtlesim Demo` behavior.
 
 <p float="center">
-  <img src="../img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="30%">
-  <img src="../img/behavior_dashboard.png" alt="Behavior dashboard view" width="30%">
-  <img src="../img/editor_view.png" alt="State machine editor view" width="30%">
+  <img src="img/loading_behavior.png" alt="Loading behavior via FlexBE UI Dashboard" width="30%">
+  <img src="img/behavior_dashboard.png" alt="Behavior dashboard view" width="30%">
+  <img src="img/editor_view.png" alt="State machine editor view" width="30%">
 </p>
 Once loaded, the behavior dashboard (middle image) is used to configure variables and inputs to the behavior as a whole.
 In this example we specify the topic for the turtle command velocity and the location of the "home" position for our turtle.
@@ -143,7 +144,7 @@ For example, the [`timed_cmd_vel_state`](../flexbe_turtlesim_demo_flexbe_states/
 implements the `TimeCmdVelState` that publishes a fixed command velocity as a [Twist](https://docs.ros2.org/latest/api/geometry_msgs/msg/TwistStamped.html) (forward speed and turning rate) for a given time duration.  The `FlexBE Turtlesim Demo` behavior includes the `EightMove` sub-state machine container.  Opening that container - either by double clicking on container or single clicking and requesting to open the container - shows five state instances of the `TimedCmdVelState`.  The specific parameters values are set in the FlexBE Editor by clicking on a particular state; the "EightMove" state machine with specific "LeftTurn" state values are shown below.
 
 <p float="center">
-  <img src="../img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="45%">
+  <img src="img/timed_cmd_vel.png" alt="LeftTurn state parameters within the 'EightMove' state machine container." width="45%">
 </p>
 
 Other types of containers are described in the detailed [Examples](examples.md).
@@ -153,8 +154,8 @@ Other types of containers are described in the detailed [Examples](examples.md).
 The *Runtime Control* tab allows the operator to launch behaviors on the onboard system, and monitor their execution.
 
 <p float="center">
-  <img src="../img/execute_view.png" alt="Ready to launch loaded behavior." width="45%">
-  <img src="../img/monitoring_view.png" alt="Monitoring running behavior." width="45%">
+  <img src="img/execute_view.png" alt="Ready to launch loaded behavior." width="45%">
+  <img src="img/monitoring_view.png" alt="Monitoring running behavior." width="45%">
 </p>
 
 Click on the transition oval labeled "Eight" to make one loop in the figure 8 pattern.
@@ -181,8 +182,8 @@ in "Full" autonomy mode this suggested "Eight" transition is selected automatica
 This was the mode used in the initial autonomous demonstration started with `be_launcher`.
 
 <p float="center">
-  <img src="../img/operator_decision_state.png" alt="Configuring the operator decision state." width="35%">
-  <img src="../img/full_autonomy_loops.png" alt="Autonomous behavior in Full autonomy." width="45%">
+  <img src="img/operator_decision_state.png" alt="Configuring the operator decision state." width="35%">
+  <img src="img/full_autonomy_loops.png" alt="Autonomous behavior in Full autonomy." width="45%">
 </p>
 
 Read the descriptions linked to each transition and practice executing the different behaviors above.

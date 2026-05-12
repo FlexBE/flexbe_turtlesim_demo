@@ -7,7 +7,8 @@
     <author>David Conner</author>
     <date>Thursday 30-June-2023</date>
     <description>
-        This is a simple example for a behavior using custom example_state that logs each function in life cycle.
+        This is a simple example for a behavior using custom example_state that logs
+        each function in life cycle.
     </description>
 
 
@@ -22,5 +23,6 @@
         </param>
 
     </params>
+
 
 </behavior>

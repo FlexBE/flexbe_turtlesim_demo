@@ -9,8 +9,7 @@
     <description>
         A simple behavior demonstrating the Turtlesim RotateAbsolute action interface.
         
-        The example includes userdata defined in the statemachine configuration.
-        
+        The example includes userdata defined in the state machine configuration.
     </description>
 
 

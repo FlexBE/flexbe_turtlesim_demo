@@ -19,7 +19,7 @@ detailed [Examples](docs/examples.md) with custom states and behaviors to illust
 
 ## Installation
 
-These directions presumes installation of the [flexbe_behavior_engine] for ROS 2 `iron` or later.
+These directions presumes installation of the [flexbe_behavior_engine] for ROS 2 `kilted` or later.
 You may do so via the binaries using `sudo apt install ros-<DISTRO>-flexbe-behavior-engine` or
 from source at [flexbe_behavior_engine].
 
@@ -36,6 +36,10 @@ Install any required dependencies.
 
   * `rosdep update`
   * `rosdep install --from-paths src --ignore-src -y`
+
+> Note: ROS 2 Kilted and later use the `turtlesim_msgs` package (separate from `turtlesim`)
+> for `RotateAbsolute` and `TeleportAbsolute` interfaces. `rosdep install` handles this automatically.
+> If you install manually: `sudo apt install ros-<DISTRO>-turtlesim-msgs`
 
 
 Build your workspace:
@@ -67,15 +71,15 @@ Launch TurtleSim:
 > Note: Unlike simulators such as `Gazebo`, `TurtleSim` does NOT
 > publish a `\clock` topic to ROS.  Therefore, do NOT set `use_sim_time:=True` with these demonstrations!
 > Without a `clock`, nothing gets published and so the system will appear hung; therefore TurtleSim should
-> use the real wallclock time.
+> use the real wallclock time.  `use_sim_time:=False` is the default, so it need not be specified.
 
 Start the FlexBE *Onboard* system using
 
-`ros2 launch flexbe_onboard behavior_onboard.launch.py use_sim_time:=False`
+`ros2 launch flexbe_onboard behavior_onboard.launch.py`
 
 Start a demonstration behavior in fully autonomous mode
 
-`ros2 run flexbe_widget be_launcher -b "FlexBE Turtlesim Demo" --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False`
+`ros2 run flexbe_widget be_launcher -b "FlexBE Turtlesim Demo" --ros-args --remap __node:="behavior_launcher"`
 
   This will launch the `FlexBE Turtlesim Demo` behavior, which will move the turtle through a series of motions to generate
   a figure 8 pattern in full autonomy mode.
@@ -83,7 +87,7 @@ Start a demonstration behavior in fully autonomous mode
   and serves to verify that the installation is working properly.
 
 <p float="center">
-  <img src="img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'FlexBE Turtlesim Demo' behavior." width="35%">
+  <img src="docs/img/turtlesim_figure8.png" alt="Turtlesim figure 8 under FlexBE 'FlexBE Turtlesim Demo' behavior." width="35%">
 </p>
 
  > Note: Clicking on any image in these examples will give the high resolution view.  These images are taken from the FlexBE App,
@@ -96,22 +100,18 @@ Since `be_launcher` is already running, start only the mirror and web server —
 `flexbe_ocs.launch.py` here, as that would start a second `be_launcher`:
 
 ```
-ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror" -p use_sim_time:=False
+ros2 run flexbe_mirror behavior_mirror_sm --ros-args --remap __node:="behavior_mirror"
 ```
 
-Then open the UI:
+Then open the UI.  First run the UI server:
 
 ```
 ros2 run flexbe_webui webui_node
 ```
 
-If you experience GPU/rendering issues, run `webui_node` in headless mode:
+We are doing this in *headless* mode here, before we open the
+recommended UI client in a separate terminal:
 
-```
-ros2 run flexbe_webui webui_node --ros-args -p headless:=True
-```
-
-and open the UI client (recommended) in a separate terminal:
 ```
 ros2 run flexbe_webui webui_client
 ```

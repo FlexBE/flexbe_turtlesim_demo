@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>flexbe_turtlesim_demo</name>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   <description>
-    A meta-package to aggregate the FlexBE turtlesim demonstraion packages
+    A meta-package to aggregate the FlexBE turtlesim demonstration packages
   </description>
 
   <author email="robotics@cnu.edu">David Conner</author>
   <maintainer email="robotics@cnu.edu">David Conner</maintainer>
-  <license>BSD</license>
+  <license>Apache-2.0</license>
 
   <url>http://ros.org/wiki/flexbe</url>
   <url type="bugtracker">https://github.com/FlexBE/flexbe_turtlesim_demo/issues</url>

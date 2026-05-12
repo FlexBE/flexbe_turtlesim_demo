@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2026 Christopher Newport University
 #
@@ -22,7 +22,7 @@ PACKAGE_NAME = 'flexbe_turtlesim_demo_flexbe_behaviors'
 
 setup(
     name=PACKAGE_NAME,
-    version='0.0.3',
+    version='0.0.4',
     packages=[PACKAGE_NAME],
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -35,7 +35,7 @@ setup(
     maintainer_email='robotics@cnu.edu',
     description='flexbe_turtlesim_demo_flexbe_behaviors provides a collection of custom '
                 'behaviors to provide a simple demonstration of FlexBE using the ROS Turtlesim packages.',
-    license='BSD',
+    license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

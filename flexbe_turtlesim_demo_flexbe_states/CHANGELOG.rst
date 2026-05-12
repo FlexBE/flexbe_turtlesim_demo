@@ -2,6 +2,13 @@
 Changelog for package flexbe_turtlesim_demo_flexbe_states
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.4 (2026-03-25)
+------------------
+* Behaviors, manifests, metadata, and tooling cleanup
+* State implementation cleanup
+* Add conditional turtlesim_msgs dependency for Kilted and later
+* Add FlexBE state docstring validation to colcon tests
+
 0.0.3 (2026-03-20)
 ------------------
 * add tests and flake8 cleanup

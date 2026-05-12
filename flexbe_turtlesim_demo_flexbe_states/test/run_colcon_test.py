@@ -1,4 +1,4 @@
-# Copyright 2026 Philipp Schillinger, Team ViGIR, Christopher Newport University
+# Copyright 2026 Christopher Newport University
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -26,39 +26,48 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"""flexbe_turtlesim_demo_flexbe_states testing."""
 
-from os.path import join
+"""Pytest testing for flexbe_turtlesim_demo_flexbe_states."""
+
 from pathlib import Path
 
-from ament_index_python.packages import get_package_share_directory
-
-from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
+from flexbe_testing.py_tester import PyTester
 
 
-def generate_launch_description():
-    """Flexbe_states testing."""
-    flexbe_testing_dir = get_package_share_directory('flexbe_testing')
-    flexbe_states_test_dir = get_package_share_directory('flexbe_turtlesim_demo_flexbe_states')
+class TestFlexBETurtleSimDemoStates(PyTester):
+    """Pytest testing for flexbe_turtlesim_demo_flexbe_states."""
 
-    path = join(flexbe_states_test_dir, 'tests')
-    testcases = '\n'.join(str(test_file) for test_file in sorted(Path(path).glob('*.test')))
-    if testcases:
-        testcases += '\n'
+    # def __init__(self, *args, **kwargs):
+    #     """Initialize unit test."""
+    #     super().__init__(*args, **kwargs)
 
-    return LaunchDescription([
-        DeclareLaunchArgument('pkg', default_value='flexbe_turtlesim_demo_flexbe_states'),
-        DeclareLaunchArgument('testcases', default_value=testcases),
-        DeclareLaunchArgument('compact_format', default_value='true'),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(join(flexbe_testing_dir, 'launch', 'flexbe_testing.launch.py')),
-            launch_arguments={
-                'package': LaunchConfiguration('pkg'),
-                'compact_format': LaunchConfiguration('compact_format'),
-                'testcases': LaunchConfiguration('testcases'),
-            }.items()
-        )
-    ])
+    @classmethod
+    def setUpClass(cls):
+        """Point PyTester at the installed test assets for this package."""
+        PyTester._package = 'flexbe_turtlesim_demo_flexbe_states'
+        PyTester._tests_folder = 'test'
+
+        PyTester.setUpClass()  # Do this last after setting package and tests folder
+
+
+_TEST_TIMEOUTS = {
+    'clear_turtlesim_state': {'timeout_sec': 2.0, 'max_cnt': 5000},
+    'rotate_turtle_state': {'timeout_sec': 2.0, 'max_cnt': 5000},
+    'teleport_absolute_state': {'timeout_sec': 2.0, 'max_cnt': 5000},
+    'timed_cmd_vel_state': {'timeout_sec': 2.0, 'max_cnt': 5000},
+}
+
+
+def _make_flexbe_test(test_name):
+    """Create a pytest/unittest-compatible test method for a single FlexBE .test file."""
+
+    def _test(self):
+        self.run_test(test_name, **_TEST_TIMEOUTS.get(test_name, {}))
+
+    _test.__name__ = f'test_{test_name}'
+    _test.__doc__ = f"Run FlexBE unit test from '{test_name}.test'."
+    return _test
+
+
+for _test_file in sorted(Path(__file__).resolve().parent.glob('*.test')):
+    setattr(TestFlexBETurtleSimDemoStates, f'test_{_test_file.stem}', _make_flexbe_test(_test_file.stem))

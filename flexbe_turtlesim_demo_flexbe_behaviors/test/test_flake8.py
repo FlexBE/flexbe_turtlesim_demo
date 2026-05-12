@@ -14,8 +14,8 @@
 
 """Run flake8 tests."""
 
-import warnings
 from pathlib import Path
+import warnings
 
 from ament_flake8.main import main_with_errors
 
@@ -37,10 +37,12 @@ def test_flake8():
     repo_root = test_dir.parent.parent
     config_file = repo_root / '.flake8'
 
+    # Exclude generated *_sm.py files; only check hand-written sources
+    hand_written = [p for p in package_dir.glob('*.py') if not p.name.endswith('_sm.py')]
     custom_argv = [
         '--config',
         str(config_file),
-        str(package_dir),
+        *[str(p) for p in sorted(hand_written)],
         str(test_dir),
         str(test_dir.parent / 'setup.py'),
     ]

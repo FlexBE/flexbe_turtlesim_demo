@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2026 Christopher Newport University
 #
@@ -25,14 +25,14 @@ PACKAGE_NAME = 'flexbe_turtlesim_demo_flexbe_states'
 
 setup(
     name=PACKAGE_NAME,
-    version='0.0.3',
+    version='0.0.4',
     packages=find_packages(),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + PACKAGE_NAME]),
         ('share/' + PACKAGE_NAME, ['package.xml']),
-        ('share/' + PACKAGE_NAME + '/tests', glob('tests/*.test')),
-        ('share/' + PACKAGE_NAME + '/launch', glob('tests/*.launch.py')),
+        ('share/' + PACKAGE_NAME + '/test', glob('test/*.test')),
+        ('share/' + PACKAGE_NAME + '/launch', glob('test/*.launch.py')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -40,7 +40,7 @@ setup(
     maintainer_email='robotics@cnu.edu',
     description='flexbe_turtlesim_demo_flexbe_states provides a collection of custom states '
                 'to provide a simple demonstration of FlexBE using the ROS Turtlesim packages.',
-    license='BSD',
+    license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

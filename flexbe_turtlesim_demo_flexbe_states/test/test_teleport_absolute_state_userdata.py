@@ -16,8 +16,8 @@
 
 """Regression tests for TeleportAbsoluteState userdata validation."""
 
-import unittest
 from types import SimpleNamespace
+import unittest
 from unittest.mock import patch
 
 from flexbe_turtlesim_demo_flexbe_states.teleport_absolute_state import TeleportAbsoluteState

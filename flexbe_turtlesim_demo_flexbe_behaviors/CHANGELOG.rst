@@ -2,6 +2,13 @@
 Changelog for package flexbe_turtlesim_demo_flexbe_behaviors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.4 (2026-05-11)
+------------------
+* Reorganize images and documentation
+* Use ROS 2 defaults for flake8 + 130 char line length
+* Behaviors, states, manifests, metadata, and tooling cleanup
+* Add Example 5 behavior with PriorityContainer and ConcurrencyContainer demo
+
 0.0.3 (2026-03-20)
 ------------------
 * add tests and flake8 cleanup

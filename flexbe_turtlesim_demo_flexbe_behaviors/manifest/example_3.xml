@@ -9,10 +9,11 @@
     <description>
         This is a simple example for a behavior with a ConcurrencyContainer.
         
-        The behavior makes use of the custom ExampleState that logs each function in life cycle.
+        The behavior makes use of the custom ExampleState that logs each function in
+        life cycle.
         
-        Here we demonstrate concurrent behaviors with both OR and AND style exit conditions.
-        
+        Here we demonstrate concurrent behaviors with both OR and AND style exit
+        conditions.
     </description>
 
 

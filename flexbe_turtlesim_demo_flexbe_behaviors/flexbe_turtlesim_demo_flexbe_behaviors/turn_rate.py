@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 # Copyright 2026 Christopher Newport University
 #
@@ -20,7 +20,7 @@ import math
 
 def turn_rate():
     """
-    Calcuate parameters for FlexBE TurtleSim demo figure eight pattern.
+    Calculate parameters for FlexBE TurtleSim demo figure eight pattern.
 
     Manually enter these into the FlexBE parameters for figure eight
 
@@ -34,7 +34,7 @@ def turn_rate():
     desired_radius_of_curvature = 0.75  # meters
 
     print(f'Desired velocity = {desired_velocity:.3f} m/s')
-    print(f'Desired Forward travel  = {fwd_distance_traveled:.3f} m/s')
+    print(f'Desired Forward travel  = {fwd_distance_traveled:.3f} m')
     print(f'Desired radius of curvature  = {desired_radius_of_curvature:.3f} m')
 
     fwd_travel_time = fwd_distance_traveled / desired_velocity

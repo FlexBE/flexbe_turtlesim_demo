@@ -12,8 +12,8 @@ configuration dashboard after loading, and the right image shows the top-level s
 `ConcurrencyContainer`s shown.  Click on any image to see the high-resolution version.
 
 <p float="center">
-  <img src="../img/example3_dashboard.png" alt="Example 3 loaded." width="30%">
-  <img src="../img/example3_top_level_sm.png" alt="Example 3 top-level state machine." width="30%">
+  <img src="img/example3_dashboard.png" alt="Example 3 loaded." width="30%">
+  <img src="img/example3_top_level_sm.png" alt="Example 3 top-level state machine." width="30%">
 </p>
 
 In FlexBE there are three types of "containers" which hold other state machines: `StateMachine`, `ConcurrencyContainer`, and `PriorityContainer`.  In this example, we will use a `ConcurrencyContainer` as shown in the right hand image above.
@@ -29,9 +29,9 @@ From the property pane you can select "Open this container", or you may directly
 double clicking on the `Concurrent`  container box in the state machine.  The open container view shows the state machines under the top-level in the HFSM.  The two (sub-)state machines are shown below.
 
 <p float="center">
-  <img src="../img/example3_concurrent_or_property.png" alt="Example 3 Concurrent OR container properties." width="30%">
-  <img src="../img/example3_concurrent_or.png" alt="Example 3 Concurrent OR state machine." width="30%">
-  <img src="../img/example3_concurrent_and.png" alt="Example 3 Concurrent AND state machine." width="30%">
+  <img src="img/example3_concurrent_or_property.png" alt="Example 3 Concurrent OR container properties." width="30%">
+  <img src="img/example3_concurrent_or.png" alt="Example 3 Concurrent OR state machine." width="30%">
+  <img src="img/example3_concurrent_and.png" alt="Example 3 Concurrent AND state machine." width="30%">
 </p>
 
 As shown above in the leftmost image, the `Concurrent_OR` container has two instances of the `ExampleState` labeled `A` and `B`.
@@ -44,9 +44,9 @@ Both of the `done` outcomes from `C` and `D` are connected to a single container
 The "Runtime Control" panel allows the operator to adjust the wait times as shown in the leftmost image below.  For this example, `waiting_time_a` is set to `4.0` seconds, and `waiting_time_b` is set to `2.0` seconds.  Thus, state `B` will return `done` first, which will preempt state `A` after approximately 2.0 seconds.  Likewise, `waiting_time_c` is set to `4.0` seconds, and `waiting_time_d_` is set to `2.0` seconds.  State `D` will finish execution and call `on_exit` after approximately 2 seconds, but state `C` will continue to execute for another 2 seconds.
 
 <p float="center">
-  <img src="../img/example3_runtime.png" alt="Example 3 runtime start configuration." width="30%">
-  <img src="../img/example3_start.png" alt="Example 3 awaiting manual transition after Start." width="30%">
-  <img src="../img/example3_or_progress.png" alt="Example 3 Concurrent_OR in progress." width="30%">
+  <img src="img/example3_runtime.png" alt="Example 3 runtime start configuration." width="30%">
+  <img src="img/example3_start.png" alt="Example 3 awaiting manual transition after Start." width="30%">
+  <img src="img/example3_or_progress.png" alt="Example 3 Concurrent_OR in progress." width="30%">
 </p>
 
 The onboard terminal logging includes the `Logger.localinfo` from `execute` method, and shows the alternating "concurrent"
@@ -55,8 +55,8 @@ The leftmost image below shows the behavior of the `Concurrent_OR` container, an
 of the `Concurrent_AND` container given the respective 4.0 and 2.0 second wait times for this example.
 
 <p float="center">
-  <img src="../img/example3_onboard_or.png" alt="Example 3 onboard terminal logging during Concurrent_OR" width="45%">
-  <img src="../img/example3_onboard_and.png" alt="Example 3 onboard terminal logging during Concurrent_AND." width="45%">
+  <img src="img/example3_onboard_or.png" alt="Example 3 onboard terminal logging during Concurrent_OR" width="45%">
+  <img src="img/example3_onboard_and.png" alt="Example 3 onboard terminal logging during Concurrent_AND." width="45%">
 </p>
 
 Try running the behavior at varying autonomy levels.

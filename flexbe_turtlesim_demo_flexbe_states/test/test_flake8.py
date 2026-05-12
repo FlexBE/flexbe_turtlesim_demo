@@ -14,8 +14,8 @@
 
 """Run flake8 tests."""
 
-import warnings
 from pathlib import Path
+import warnings
 
 from ament_flake8.main import main_with_errors
 

@@ -1,6 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-# Copyright 2026 Christopher Newport University
+# Copyright 2015 Philipp Schillinger
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,65 +23,79 @@
 ###########################################################
 
 """
-Example behavior.
+Define Example 1.
+
+This is a simple example for a behavior.
 
 Created on Fri Aug 21 2015
 @author: Philipp Schillinger
 """
 
-from flexbe_core import Autonomy, Behavior, Logger, OperatableStateMachine
 
+from flexbe_core import Autonomy
+from flexbe_core import Behavior
+from flexbe_core import ConcurrencyContainer
+from flexbe_core import Logger
+from flexbe_core import OperatableStateMachine
+from flexbe_core import PriorityContainer
+from flexbe_core import initialize_flexbe_core
 from flexbe_states.log_state import LogState
 from flexbe_states.wait_state import WaitState
+
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
+
 
 # [/MANUAL_IMPORT]
 
 
 class Example1SM(Behavior):
-    """This is a simple example for a behavior."""
+    """
+    Define Example 1.
+
+    This is a simple example for a behavior.
+    """
 
     def __init__(self, node):
-        """Initialize ROS resources and configurable parameters for the behavior."""
         super().__init__()
         self.name = 'Example 1'
-        self.node = node
 
         # parameters of this behavior
-        LogState.initialize_ros(node)
-        WaitState.initialize_ros(node)
-        OperatableStateMachine.initialize_ros(node)
-        Logger.initialize(node)
         self.add_parameter('waiting_time', 3)
+
+        # Initialize ROS node information
+        initialize_flexbe_core(node)
 
         # references to used behaviors
 
         # Additional initialization code can be added inside the following tags
         # [MANUAL_INIT]
 
+
         # [/MANUAL_INIT]
 
         # Behavior comments:
 
-        # O 172 147
-        # This transition will only be executed if the Autonomy Level is greater than Low during execution, e.g. High
-
     def create(self):
-        """Build the behavior state machine."""
+        """Create state machine."""
+        # Private variables
         log_msg = 'Hello World!'
+
+        # Root state machine
         # x:83 y:390
         _state_machine = OperatableStateMachine(outcomes=['finished'])
 
         # Additional creation code can be added inside the following tags
         # [MANUAL_CREATE]
 
+
         # [/MANUAL_CREATE]
 
         with _state_machine:
             # x:52 y:78
             OperatableStateMachine.add('Print_Message',
-                                       LogState(text=log_msg, severity=Logger.REPORT_HINT),
+                                       LogState(text=log_msg,
+                                                severity=Logger.REPORT_HINT),
                                        transitions={'done': 'Wait_After_Logging'},
                                        autonomy={'done': Autonomy.Low})
 
@@ -94,5 +109,6 @@ class Example1SM(Behavior):
 
     # Private functions can be added inside the following tags
     # [MANUAL_FUNC]
+
 
     # [/MANUAL_FUNC]

@@ -15,9 +15,9 @@ the `A` example state.
 > transition to the `A` state as the transition is blocked due to autonomy level.
 
 <p float="center">
-  <img src="../img/example2_dashboard.png" alt="Example 2 loaded." width="30%">
-  <img src="../img/example2_sm_property.png" alt="Example 2 state machine with properties." width="30%">
-  <img src="../img/example2_a_state_enter.png" alt="Example 2 state machine running." width="30%">
+  <img src="img/example2_dashboard.png" alt="Example 2 loaded." width="30%">
+  <img src="img/example2_sm_property.png" alt="Example 2 state machine with properties." width="30%">
+  <img src="img/example2_a_state_enter.png" alt="Example 2 state machine running." width="30%">
 </p>
 
 In addition to the `LogState` from `Example 1`, this behavior uses the `ExampleState` provided as part of this repo in
@@ -234,8 +234,8 @@ is called.  As the required autonomy level for this outcome is `off`, the system
 states.  The rightmost image shows the final output on the FlexBE UI as after the behavior completes and the system is ready for more.
 
 <p float="center">
-  <img src="../img/example2_onboard.png" alt="Example 2 log messages." height="30%">
-  <img src="../img/example2_complete.png" alt="Example 2 log messages." height="30%">
+  <img src="img/example2_onboard.png" alt="Example 2 log messages." height="30%">
+  <img src="img/example2_complete.png" alt="Example 2 log messages." height="30%">
 </p>
 
 For the next run, try setting the autonomy level higher to "High" or "Full", which will allow the behavior to run to completion without the operator needed to click "done" after the log state, or to "Off" which will require the operator to confirm every transition.

@@ -7,9 +7,9 @@
     <author>Collin Stone</author>
     <date>Mon Jul 17 2023</date>
     <description>
-        A simple behavior demonstrating the Turtlesim RotateAbsolute action interface, and
+        A simple behavior demonstrating the Turtlesim RotateAbsolute action interface,
+        and
         the FlexBE input state with a simple generic user interface.
-        
     </description>
 
 

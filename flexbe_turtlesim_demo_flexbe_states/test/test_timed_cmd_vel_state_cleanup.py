@@ -16,8 +16,8 @@
 
 """Regression tests for TimedCmdVelState cleanup hooks."""
 
-import unittest
 from types import SimpleNamespace
+import unittest
 from unittest.mock import patch
 
 from flexbe_turtlesim_demo_flexbe_states.timed_cmd_vel_state import TimedCmdVelState

@@ -163,12 +163,22 @@ with _sm_concurrent_priority_1:
 
 ## Running Example 5
 
+Start the FlexBE system (FlexBE WebUI v4.1+):
+
 ```bash
-ros2 run flexbe_widget be_launcher -b "Example 5" \
-    --ros-args --remap name:="behavior_launcher" -p use_sim_time:=False
+ros2 launch flexbe_webui flexbe_full.launch.py
 ```
 
-Or load it from the FlexBE UI *Behavior Dashboard* and start it from *Runtime Control*.
+> Note: TurtleSim does **not** publish a `/clock` topic, so keep `use_sim_time` at its default `False`.
+
+Then load `Example 5` from the *Behavior Dashboard* and start it from *Runtime Control*.
+
+Alternatively, run in fully autonomous mode without the OCS:
+
+```bash
+ros2 run flexbe_widget be_launcher -b "Example 5" \
+    --ros-args --remap __node:="behavior_launcher"
+```
 
 To observe the deferred `on_enter` clearly, watch the terminal logs:
 `Normal_Work`'s `on_enter` log line will not appear until approximately

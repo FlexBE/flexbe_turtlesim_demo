@@ -9,8 +9,8 @@
     <description>
         FlexBE demonstration using ROS Turtlesim from ROS tutorials.
         
-        Demonstrates several FlexBE capabilities including synchronous and async service calls, action interfaces, and  operator input.
-        
+        Demonstrates several FlexBE capabilities including synchronous and async
+        service calls, action interfaces, and operator input.
     </description>
 
 

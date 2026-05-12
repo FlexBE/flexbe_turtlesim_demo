@@ -13,9 +13,9 @@ information.  The behavior name is converted into the implementation Python file
 In addition to the Python file, a "behavior manifest" `example_1.xml` is written as well.
 
 <p float="center">
-  <img src="../img/example1_loading.png" alt="Loading Example 1." width="30%">
-  <img src="../img/example1_config.png" alt="Example 1 configuration." width="30%">
-  <img src="../img/example1_sm.png" alt="Example 1 state machine." width="30%">
+  <img src="img/example1_loading.png" alt="Loading Example 1." width="30%">
+  <img src="img/example1_config.png" alt="Example 1 configuration." width="30%">
+  <img src="img/example1_sm.png" alt="Example 1 state machine." width="30%">
 </p>
 
 FlexBE Behavior editor view for "Example 1" behavior.  Click on any image to see the high resolution annotated versions.
@@ -143,9 +143,9 @@ image below.  As this is during the wait period the output transition is shown i
 
 
 <p float="center">
-  <img src="../img/example1_start_low.png" alt="Example 1 start screen." width="30%">
-  <img src="../img/example1_low_block.png" alt="Example 1 log messages." width="30%">
-  <img src="../img/example1_wait.png" alt="Example 1 waiting." width="30%">
+  <img src="img/example1_start_low.png" alt="Example 1 start screen." width="30%">
+  <img src="img/example1_low_block.png" alt="Example 1 log messages." width="30%">
+  <img src="img/example1_wait.png" alt="Example 1 waiting." width="30%">
 </p>
 
 For the next run, try setting the autonomy level higher to "High" or "Full", which will allow the behavior to run to completion without the operator needed to click "done" after the log state.

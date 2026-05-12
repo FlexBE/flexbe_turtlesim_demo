@@ -14,4 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""FlexBE behavior definitions for the turtlesim demo."""
+"""Validate FlexBE state docstring tags consumed by the WebUI state parser."""
+
+from pathlib import Path
+
+from flexbe_testing.state_docstring_tester import assert_state_docstrings_valid
+
+
+def test_state_docstring_tags_are_valid():
+    """Check state docstring tags for this package."""
+    package_dir = Path(__file__).resolve().parents[1]
+    paths = [package_dir / 'flexbe_turtlesim_demo_flexbe_states']
+    assert_state_docstrings_valid(paths, strict_interface=True)

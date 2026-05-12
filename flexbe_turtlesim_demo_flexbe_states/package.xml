@@ -4,13 +4,13 @@
     schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
     <name>flexbe_turtlesim_demo_flexbe_states</name>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <description>
       flexbe_turtlesim_demo_flexbe_states provides a collection of custom states to
       provide a simple demonstration of FlexBE using the ROS Turtlesim packages.
     </description>
     <maintainer email="robotics@cnu.edu">David Conner</maintainer>
-    <license>BSD</license>
+    <license>Apache-2.0</license>
 
     <buildtool_depend>ament_cmake</buildtool_depend>
     <buildtool_depend>ament_cmake_python</buildtool_depend>
@@ -27,11 +27,17 @@
     <exec_depend>turtlesim</exec_depend>
     <!-- turtlesim provides actions/services in older ROS distributions;
          turtlesim_msgs in newer distributions -->
-    <!-- <exec_depend>turtlesim_msgs</exec_depend>  -->
+    <exec_depend
+        condition="$ROS_DISTRO != 'humble' and
+                   $ROS_DISTRO != 'iron' and
+                   $ROS_DISTRO != 'jazzy'">
+        turtlesim_msgs
+    </exec_depend>
 
     <test_depend>ament_copyright</test_depend>
     <test_depend>ament_flake8</test_depend>
     <test_depend>ament_pep257</test_depend>
+    <test_depend>flexbe_testing</test_depend>
     <test_depend>python3-pytest</test_depend>
 
     <export>
